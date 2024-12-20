@@ -1,0 +1,51 @@
+/* Full screen layout */
+body,
+html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f0f0f0;
+}
+
+#tilemap-container {
+    display: grid;
+    gap: 0;
+    /* Remove gaps between tiles */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/* Tile style */
+.tile {
+    background-color: lightgreen;
+    border: 1px solid #ccc;
+    transition: background-color 0.3s ease;
+    width: 100%;
+    /* Each tile takes up 100% of its grid space */
+    height: 100%;
+    /* Each tile takes up 100% of its grid space */
+}
+
+/* Different tile types */
+.tile.wall {
+    background-color: gray;
+}
+
+.tile.water {
+    background-color: blue;
+}
+
+.tile.grass {
+    background-color: green;
+}
+
+/* Hover effect */
+.tile:hover {
+    background-color: rgba(255, 255, 255, 0.411);
+}
