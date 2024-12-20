@@ -49,3 +49,37 @@ html {
 .tile:hover {
     background-color: rgba(255, 255, 255, 0.411);
 }
+
+/* Character style */
+/* Character style */
+.character {
+    position: absolute;
+    /* Absolute positioning on top of the tiles */
+    width: 50px;
+    /* Width of the character */
+    height: 50px;
+    /* Height of the character */
+    background-color: black;
+    /* Character color */
+    border-radius: 50%;
+    /* Makes the character circular */
+    transition: left 0.1s, top 0.1s;
+    /* Smooth transition for position */
+}
+
+/* Popup style */
+.popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 20px 40px;
+    font-size: 24px;
+    font-weight: bold;
+    border-radius: 10px;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+    z-index: 1000;
+}
