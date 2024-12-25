@@ -47,20 +47,26 @@ function isValidMove(x, y) {
 // Function to move the character randomly
 function moveCharacterRandomly() {
     const directions = [
-        { x: 0, y: -1 },
-        { x: 0, y: 1 },
-        { x: -1, y: 0 },
-        { x: 1, y: 0 }  
+        { x: 0, y: -1 },  // up
+        { x: 0, y: 1 },   // down
+        { x: -1, y: 0 },  // left
+        { x: 1, y: 0 }    // right
     ];
-
-    const direction = directions[Math.floor(Math.random() * directions.length)];
-    const newX = characterPosition.x + direction.x;
-    const newY = characterPosition.y + direction.y;
-
-    if (isValidMove(newX, newY)) {
-        characterPosition.x = newX;
-        characterPosition.y = newY;
-        updateCharacterPosition();
+    
+    // Shuffle the directions array to try them in random order
+    let shuffledDirections = [...directions].sort(() => Math.random() - 0.5);
+    
+    // Try each direction until finding a valid move
+    for (let direction of shuffledDirections) {
+        const newX = characterPosition.x + direction.x;
+        const newY = characterPosition.y + direction.y;
+        
+        if (isValidMove(newX, newY)) {
+            characterPosition.x = newX;
+            characterPosition.y = newY;
+            updateCharacterPosition();
+            return; // Exit once we've found a valid move
+        }
     }
 }
 
