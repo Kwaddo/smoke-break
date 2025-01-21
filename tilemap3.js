@@ -7,7 +7,7 @@ let tiles = [];
 
 // Function to calculate the tile size and adjust the grid
 function calculateTileSize() {
-    const screenWidth = window.innerWidth/2;
+    const screenWidth = window.innerWidth/2.1;
     const screenHeight = window.innerHeight;
 
     // Set the maximum tile size based on the smaller dimension of the screen
