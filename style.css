@@ -21,6 +21,17 @@ html {
     transform: translate(-50%, -50%);
 }
 
+.map{
+    background-image: url(images/mapv1.png);
+    width: 50%;
+    height: 99%;
+    background-size: contain;
+    background-repeat: no-repeat;
+    z-index: 1;
+    background-position: 50%;
+    opacity: 0.6;
+}
+
 /* Tile style */
 .tile {
     background-color: lightgreen;
