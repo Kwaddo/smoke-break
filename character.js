@@ -1,136 +1,115 @@
-// Character properties
-let characterPosition = { x: 0, y: 0 }; // Starting position (top-left corner)
-let characterTile;
-let lastMoveTime = 0; // Time of the last move
-const moveInterval = 500; // Move every 5 seconds (5000 ms)
-let isMoving = false; // To prevent multiple simultaneous moves
+let characters = [];
+const numCharacters = 5; 
+let lastMoveTime = 0;
+const moveInterval = 500;
+let isMoving = false;
 
-// Function to create and position the character
-function createCharacter() {
+function createCharacter(startX, startY) {
     const character = document.createElement('div');
-    character.classList.add('character'); // Add a CSS class for styling
-    tilemapContainer.appendChild(character); // Use the existing tilemapContainer from tilemap.js
-
-    // Store reference to the character element
-    characterTile = character; 
-    updateCharacterPosition();
-
-    // Add click event to remove character and show "YOU WIN!" popup
-    characterTile.addEventListener('click', () => {
-        removeCharacter();  // Remove the character
-        showWinPopup();  // Display the win popup
+    character.classList.add('character');
+    tilemapContainer.appendChild(character);
+    const characterObj = {
+        element: character,
+        position: { x: startX, y: startY }
+    };
+    characters.push(characterObj);
+    updateCharacterPosition(characterObj);
+    character.addEventListener('click', () => {
+        removeCharacter(characterObj);
+        showWinPopup();
     });
 }
 
-// Function to update the character's position on the grid
-function updateCharacterPosition() {
-    // Calculate the position to center the character within its tile
-    const left = characterPosition.x * tileSize + (tileSize / 2) - (characterTile.offsetWidth / 2);
-    const top = characterPosition.y * tileSize + (tileSize / 2) - (characterTile.offsetHeight / 2);
-
-    // Apply the calculated position to the character
-    characterTile.style.left = `${left}px`;
-    characterTile.style.top = `${top}px`;
+function updateCharacterPosition(characterObj) {
+    const left = characterObj.position.x * tileSize + (tileSize / 2) - (characterObj.element.offsetWidth / 2);
+    const top = characterObj.position.y * tileSize + (tileSize / 2) - (characterObj.element.offsetHeight / 2);
+    characterObj.element.style.left = `${left}px`;
+    characterObj.element.style.top = `${top}px`;
 }
 
-// Function to check if the character can move to the given tile
 function isValidMove(x, y) {
-    // Ensure the character stays within the grid bounds and on walkable tiles (grass)
     if (x < 0 || x >= columns || y < 0 || y >= rows) {
-        return false; // Out of bounds
+        return false;
     }
-
-    const tile = tiles[y * columns + x]; // Get the tile at the new position
-    return tile && !tile.classList.contains('wall') && !tile.classList.contains('water'); // Can only walk on grass
+    const tile = tiles[y * columns + x];
+    return tile && !tile.classList.contains('wall');
 }
 
-// Function to move the character randomly
-function moveCharacterRandomly() {
+function moveCharacterRandomly(characterObj) {
     const directions = [
-        { x: 0, y: -1 },  // up
-        { x: 0, y: 1 },   // down
-        { x: -1, y: 0 },  // left
-        { x: 1, y: 0 }    // right
+        { x: 0, y: -1 },
+        { x: 0, y: 1 },
+        { x: -1, y: 0 },
+        { x: 1, y: 0 }
     ];
-    
-    // Shuffle the directions array to try them in random order
     let shuffledDirections = [...directions].sort(() => Math.random() - 0.5);
-    
-    // Try each direction until finding a valid move
     for (let direction of shuffledDirections) {
-        const newX = characterPosition.x + direction.x;
-        const newY = characterPosition.y + direction.y;
-        
+        const newX = characterObj.position.x + direction.x;
+        const newY = characterObj.position.y + direction.y;
         if (isValidMove(newX, newY)) {
-            characterPosition.x = newX;
-            characterPosition.y = newY;
-            updateCharacterPosition();
-            return; // Exit once we've found a valid move
+            characterObj.position.x = newX;
+            characterObj.position.y = newY;
+            updateCharacterPosition(characterObj);
+            return;
         }
     }
 }
 
-// Function to animate the game loop (move every 5 seconds)
 function gameLoop(timestamp) {
-    // Calculate elapsed time from the last frame
     if (!lastMoveTime) lastMoveTime = timestamp;
-
     const deltaTime = timestamp - lastMoveTime;
-
-    // Move character at the specified interval
     if (deltaTime > moveInterval) {
         if (!isMoving) {
             isMoving = true;
-            moveCharacterRandomly(); // Move the character randomly
-            lastMoveTime = timestamp; // Reset last move time
+            characters.forEach(character => {
+                moveCharacterRandomly(character);
+            });
+            lastMoveTime = timestamp;
         }
     } else {
         isMoving = false;
     }
-
-    // Continue the animation loop
     requestAnimationFrame(gameLoop);
 }
 
-// Function to remove the character
-function removeCharacter() {
-    if (characterTile) {
-        tilemapContainer.removeChild(characterTile); // Remove the character element from the DOM
-        characterTile = null; // Reset the character reference
+function removeCharacter(characterObj) {
+    if (characterObj && characterObj.element) {
+        tilemapContainer.removeChild(characterObj.element);
+        const index = characters.indexOf(characterObj);
+        if (index !== -1) {
+            characters.splice(index, 1);
+        }
     }
 }
 
-// Function to show the "YOU WIN!" popup
 function showWinPopup() {
     const popup = document.createElement('div');
     popup.classList.add('popup');
     popup.innerText = 'YOU WIN!';
     document.body.appendChild(popup);
-
-    // Style the popup
     setTimeout(() => {
         popup.style.opacity = 1;
     }, 100);
-
     setTimeout(() => {
         popup.style.opacity = 0;
         setTimeout(() => {
-            document.body.removeChild(popup); // Remove the popup after fading out
+            document.body.removeChild(popup);
         }, 300);
-    }, 2000); // Fade out after 2 seconds
+    }, 2000);
 }
 
-// Initialize character and animation
 function initCharacter() {
-    createCharacter();
-    requestAnimationFrame(gameLoop); // Start the game loop with requestAnimationFrame
+    for (let i = 0; i < numCharacters; i++) {
+        const startX = Math.floor(Math.random() * columns);
+        const startY = Math.floor(Math.random() * rows);
+        createCharacter(startX, startY);
+    }
+    requestAnimationFrame(gameLoop);
 }
 
-// Rebuild tilemap when resizing the window
 window.addEventListener('resize', () => {
-    calculateTileSize(); // Recalculate tile size and grid
-    updateCharacterPosition(); // Update character position on resize
+    calculateTileSize();
+    characters.forEach(updateCharacterPosition); 
 });
 
-// Initialize the character and tilemap on load
 initCharacter();

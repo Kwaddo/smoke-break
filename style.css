@@ -13,72 +13,41 @@ html {
 
 #tilemap-container {
     display: grid;
-    gap: 0;
-    /* Remove gaps between tiles */
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    position: relative;
+    width: 100%; 
+    height: 100%;
+    z-index: 5; 
 }
 
-.map{
-    background-image: url(images/mapv1.png);
-    width: 50%;
-    height: 99%;
-    background-size: contain;
-    background-repeat: no-repeat;
-    z-index: 1;
-    background-position: 50%;
-    opacity: 0.6;
-}
-
-/* Tile style */
 .tile {
-    background-color: lightgreen;
-    border: 1px solid #ccc;
+    border: 0.5px solid #cccccc83;
     transition: background-color 0.3s ease;
     width: 100%;
-    /* Each tile takes up 100% of its grid space */
     height: 100%;
-    /* Each tile takes up 100% of its grid space */
 }
 
-/* Different tile types */
 .tile.wall {
-    background-color: gray;
+    background-color: rgba(0, 0, 0, 0.63);
 }
 
-.tile.water {
-    background-color: blue;
+.tile.empty {
+    background-color: transparent;
 }
 
-.tile.grass {
-    background-color: green;
-}
-
-/* Hover effect */
-.tile:hover {
+.tile.empty:hover {
     background-color: rgba(255, 255, 255, 0.411);
 }
 
-/* Character style */
-/* Character style */
 .character {
     position: absolute;
-    /* Absolute positioning on top of the tiles */
-    width: 50px;
-    /* Width of the character */
-    height: 50px;
-    /* Height of the character */
-    background-color: black;
-    /* Character color */
+    width: 4%;
+    height: 4%;
+    background-color: white;
+    box-shadow: #00000083 0px 0px 10px 0px;
     border-radius: 50%;
-    /* Makes the character circular */
     transition: left 0.1s, top 0.1s;
-    /* Smooth transition for position */
 }
 
-/* Popup style */
 .popup {
     position: fixed;
     top: 50%;
@@ -93,4 +62,20 @@ html {
     opacity: 0;
     transition: opacity 0.3s ease-in-out;
     z-index: 1000;
+}
+
+.map {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); 
+    display: grid;
+    grid-template-columns: inherit;
+    grid-template-rows: inherit;
+    width: 100%; 
+    height: 100%; 
+    z-index: 1;
+    background-image: url(images/mapv1.png);
+    background-repeat: no-repeat;
+    background-size: cover;
 }
