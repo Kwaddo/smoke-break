@@ -3,6 +3,7 @@ const numCharacters = 5;
 let lastMoveTime = 0;
 const moveInterval = 500;
 let isMoving = false;
+let winningCharacter = null; 
 
 function createCharacter(startX, startY) {
     const character = document.createElement('div');
@@ -10,13 +11,16 @@ function createCharacter(startX, startY) {
     tilemapContainer.appendChild(character);
     const characterObj = {
         element: character,
-        position: { x: startX, y: startY }
+        position: { x: startX, y: startY },
+        isWinningCharacter: false 
     };
     characters.push(characterObj);
     updateCharacterPosition(characterObj);
     character.addEventListener('click', () => {
-        removeCharacter(characterObj);
-        showWinPopup();
+        if (characterObj.isWinningCharacter) {
+            showWinPopup();
+            removeCharacter(characterObj);
+        }
     });
 }
 
@@ -104,6 +108,10 @@ function initCharacter() {
         const startY = Math.floor(Math.random() * rows);
         createCharacter(startX, startY);
     }
+    winningCharacter = characters[Math.floor(Math.random() * characters.length)];
+    winningCharacter.isWinningCharacter = true;
+    winningCharacter.element.classList.add('winning-character'); 
+
     requestAnimationFrame(gameLoop);
 }
 
