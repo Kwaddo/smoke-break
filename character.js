@@ -3,7 +3,7 @@ const numCharacters = 5;
 let lastMoveTime = 0;
 const moveInterval = 500;
 let isMoving = false;
-let winningCharacter = null; 
+export let winningCharacter = null; 
 
 function createCharacter(startX, startY) {
     const character = document.createElement('div');
@@ -31,7 +31,7 @@ function updateCharacterPosition(characterObj) {
     characterObj.element.style.top = `${top}px`;
 }
 
-function isValidMove(x, y) {
+export function isValidMove(x, y) {
     if (x < 0 || x >= columns || y < 0 || y >= rows) {
         return false;
     }
@@ -76,7 +76,7 @@ function gameLoop(timestamp) {
     requestAnimationFrame(gameLoop);
 }
 
-function removeCharacter(characterObj) {
+export function removeCharacter(characterObj) {
     if (characterObj && characterObj.element) {
         tilemapContainer.removeChild(characterObj.element);
         const index = characters.indexOf(characterObj);
@@ -86,7 +86,7 @@ function removeCharacter(characterObj) {
     }
 }
 
-function showWinPopup() {
+export function showWinPopup() {
     const popup = document.createElement('div');
     popup.classList.add('popup');
     popup.innerText = 'YOU WIN!';

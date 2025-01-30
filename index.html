@@ -9,8 +9,16 @@
 </head>
 
 <style>
-    .winning-character{
+    .winning-character {
         background-color: blue;
+    }
+
+    #player {
+        background-color: black;
+        width: 20px;
+        height: 20px;
+        position: absolute;
+        z-index: 999;
     }
 </style>
 
@@ -18,7 +26,7 @@
     <div id="tilemap-container"></div>
     <div class="map"></div>
     <script src="tilemap2.js"></script>
-    <script src="character.js"></script>
+    <script type="module" src="character.js"></script>
+    <script type="module" src="player.js"></script>
 </body>
-
 </html>

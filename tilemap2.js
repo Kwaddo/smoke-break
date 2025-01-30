@@ -48,8 +48,6 @@ function createTilemap() {
             if (
                 (row === centerRow && col === centerCol) || // Center tile
                 (row === centerRow - 1 && col === centerCol) || // Tile above center
-                (row === centerRow + 1 && col === centerCol) || // Tile below center
-                (row === centerRow && col === centerCol - 1) || // Tile left of center
                 (row === centerRow && col === centerCol + 1)    // Tile right of center
             ) {
                 tile.classList.add('wall'); // Set default type to 'wall'
