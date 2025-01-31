@@ -4,26 +4,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tilemap without Canvas</title>
+    <title>Game Mode Selection</title>
     <link rel="stylesheet" href="style.css">
 </head>
 
 <style>
-    .winning-character {
-        background-color: blue;
+    body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background-color: #222;
+        color: white;
+        font-family: Arial, sans-serif;
+    }
+
+    .mode-selection {
+        text-align: center;
+    }
+
+    .mode-option {
+        display: flex;
+        gap: 20px;
+    }
+
+    .mode-button {
+        padding: 15px 30px;
+        font-size: 18px;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: 0.3s;
+        text-transform: uppercase;
+    }
+
+    .single {
+        background-color: #3498db;
+    }
+
+    .single:hover {
+        background-color: #2980b9;
+    }
+
+    .match {
+        background-color: #e74c3c;
+    }
+
+    .match:hover {
+        background-color: #c0392b;
     }
 </style>
 
 <body>
-    <div id="game-menu">
-        <h1>Welcome to Smoke Break!</h1>
-        <button id="start-game">Start Game</button>
+    <div class="mode-selection">
+        <h1>Select Game Mode</h1>
+        <div class="mode-option">
+            <button class="mode-button single" onclick="window.location.href='single.html'">Single</button>
+            <button class="mode-button match" onclick="window.location.href='double.html'">Match</button>
+        </div>
     </div>
-    <div id="tilemap-container"></div>
-    <div class="map"></div>
-    <script src="tilemap.js"></script>
-    <script src="character.js"></script>
-    <script src="game.js"></script>
 </body>
 
 </html>

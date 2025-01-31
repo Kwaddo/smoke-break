@@ -72,15 +72,12 @@ function initCharacter() {
         } while (!window.isValidMove(startX, startY));
         createCharacter(startX, startY);
     }
-
-    // Select a new winning character
     winningCharacter = characters[Math.floor(Math.random() * characters.length)];
     winningCharacter.isWinningCharacter = true;
     winningCharacter.element.classList.add('winning-character');
     window.winningCharacter = winningCharacter;
 }
 
-//This function was missing
 function showWinPopup() {
     alert("You win!");
 }
