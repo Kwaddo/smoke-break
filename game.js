@@ -4,6 +4,10 @@ let isMoving = false
 let isPaused = false
 let gameStarted = false
 let pauseMenu
+let countdownTime = 120;
+let countdownInterval;
+let countdownDisplay;
+let score = 0;
 
 document.getElementById("start-game").addEventListener("click", () => {
     document.getElementById("game-menu").style.display = "none";
@@ -20,7 +24,71 @@ function resetGame() {
     removePlayer();
     window.winningCharacter = null;
     gameStarted = false;
+    if (countdownDisplay) {
+        countdownDisplay.remove();
+        countdownDisplay = null;
+    }
+    clearInterval(countdownInterval);
     document.getElementById("game-menu").style.display = "flex";
+}
+
+function createCountdownTimer() {
+    countdownDisplay = document.createElement("div");
+    countdownDisplay.id = "countdown-timer";
+    countdownDisplay.style.position = "absolute";
+    countdownDisplay.style.top = "10px";
+    countdownDisplay.style.right = "45%";
+    countdownDisplay.style.fontSize = "24px";
+    countdownDisplay.style.color = "white";
+    countdownDisplay.style.backgroundColor = "rgba(0, 0, 0, 0.7)";
+    countdownDisplay.style.padding = "10px";
+    countdownDisplay.style.borderRadius = "5px";
+    document.body.appendChild(countdownDisplay);
+}
+
+function updateCountdown() {
+    const minutes = Math.floor(countdownTime / 60);
+    const seconds = countdownTime % 60;
+    countdownDisplay.innerText = `Time Left: ${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
+
+    if (countdownTime <= 0) {
+        clearInterval(countdownInterval);
+        showLosePopup();
+    }
+}
+
+function startCountdown() {
+    countdownTime = 120; 
+    updateCountdown(); 
+
+    countdownInterval = setInterval(() => {
+        if (!isPaused) {
+            countdownTime--;
+            updateCountdown();
+            if (countdownTime <= 0) {
+                clearInterval(countdownInterval);
+                showLosePopup();
+            }
+        }
+    }, 1000);
+}
+
+function pauseCountdown() {
+    clearInterval(countdownInterval);
+}
+
+function resumeCountdown() {
+    clearInterval(countdownInterval); 
+    countdownInterval = setInterval(() => {
+        if (!isPaused) {
+            countdownTime--;
+            updateCountdown();
+            if (countdownTime <= 0) {
+                clearInterval(countdownInterval);
+                showLosePopup();
+            }
+        }
+    }, 1000);
 }
 
 function showWinPopup() {
@@ -28,6 +96,9 @@ function showWinPopup() {
     popup.classList.add("popup");
     popup.innerText = "YOU WIN!";
     document.body.appendChild(popup);
+    const finalScore = countdownTime;
+    
+    pauseCountdown();
     setTimeout(() => {
         popup.style.opacity = 1;
     }, 100);
@@ -35,16 +106,20 @@ function showWinPopup() {
         popup.style.opacity = 0;
         setTimeout(() => {
             document.body.removeChild(popup);
+            document.querySelector("#game-menu h1").innerText = `Your Score: ${finalScore}!`;
+            
             resetGame();
         }, 300);
     }, 2000);
 }
+
 
 function showLosePopup() {
     const popup = document.createElement("div");
     popup.classList.add("popup");
     popup.innerText = "YOU LOSE!";
     document.body.appendChild(popup);
+    pauseCountdown();
     setTimeout(() => {
         popup.style.opacity = 1;
     }, 100);
@@ -186,6 +261,7 @@ function hidePauseMenu() {
 }
 
 function togglePause() {
+    if (!gameStarted) return;
     if (isPaused) {
         unpauseGame();
     } else {
@@ -195,6 +271,7 @@ function togglePause() {
 
 function pauseGame() {
     if (!gameStarted) return;
+    pauseCountdown();
     showPauseMenu()
 }
 
@@ -202,6 +279,7 @@ function unpauseGame() {
     hidePauseMenu();
     lastMoveTime = performance.now();
     requestAnimationFrame(gameLoop);
+    resumeCountdown();
 }
 
 window.addEventListener("resize", () => {
@@ -227,7 +305,8 @@ function initGame() {
     initPlayer();
     window.initCharacter();
     createPauseMenu();
+    createCountdownTimer();
+    startCountdown();
     lastMoveTime = performance.now();
     requestAnimationFrame(gameLoop);
 }
-

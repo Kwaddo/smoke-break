@@ -1,5 +1,5 @@
 let characters = [];
-const numCharacters = 5; 
+const numCharacters = 5;
 let winningCharacter = null; 
 
 function createCharacter(startX, startY) {
