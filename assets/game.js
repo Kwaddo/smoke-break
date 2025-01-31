@@ -206,9 +206,13 @@ function movePlayer(e) {
     }
 
     if (window.isValidMove(newX, newY)) {
+        player.classList.add("moving");
         player.dataset.x = newX;
         player.dataset.y = newY;
         updatePlayerPosition(player, newX, newY);
+        setTimeout(() => {
+            player.classList.remove("moving");
+        }, 400);
 
         if (window.winningCharacter &&
             newX === window.winningCharacter.position.x &&
@@ -228,7 +232,6 @@ function movePlayer(e) {
     }
 }
 
-
 function createPauseMenu() {
     pauseMenu = document.createElement("div")
     pauseMenu.classList.add("pause-menu")
@@ -246,6 +249,7 @@ function createPauseMenu() {
 }
 
 function showPauseMenu() {
+    if (!gameStarted) return;
     if (!pauseMenu) {
         createPauseMenu()
     }
