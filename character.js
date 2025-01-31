@@ -29,6 +29,8 @@ function updateCharacterPosition(characterObj) {
 }
 
 function moveCharacterRandomly(characterObj) {
+    if (!window.characters.includes(characterObj)) return; 
+
     const directions = [
         { x: 0, y: -1 },
         { x: 0, y: 1 },
@@ -59,6 +61,9 @@ function removeCharacter(characterObj) {
 }
 
 function initCharacter() {
+    characters = [];
+    window.characters = characters;
+
     for (let i = 0; i < numCharacters; i++) {
         let startX, startY;
         do {
@@ -67,9 +72,11 @@ function initCharacter() {
         } while (!window.isValidMove(startX, startY));
         createCharacter(startX, startY);
     }
+
+    // Select a new winning character
     winningCharacter = characters[Math.floor(Math.random() * characters.length)];
     winningCharacter.isWinningCharacter = true;
-    winningCharacter.element.classList.add('winning-character'); 
+    winningCharacter.element.classList.add('winning-character');
     window.winningCharacter = winningCharacter;
 }
 
@@ -78,8 +85,6 @@ function showWinPopup() {
     alert("You win!");
 }
 
-// Export functions and variables that need to be accessed by game.js
-window.characters = characters;
 window.moveCharacterRandomly = moveCharacterRandomly;
 window.initCharacter = initCharacter;
 window.updateCharacterPosition = updateCharacterPosition;

@@ -2,22 +2,42 @@ let lastMoveTime = 0
 const moveInterval = 500
 let isMoving = false
 let isPaused = false
+let gameStarted = false
 let pauseMenu
 
+document.getElementById("start-game").addEventListener("click", () => {
+    document.getElementById("game-menu").style.display = "none";
+    initGame();
+});
+
+function resetGame() {
+    window.characters.forEach(character => {
+        if (character.element) {
+            character.element.remove();
+        }
+    });
+    window.characters = [];
+    removePlayer();
+    window.winningCharacter = null;
+    gameStarted = false;
+    document.getElementById("game-menu").style.display = "flex";
+}
+
 function showWinPopup() {
-  const popup = document.createElement("div")
-  popup.classList.add("popup")
-  popup.innerText = "YOU WIN!"
-  document.body.appendChild(popup)
-  setTimeout(() => {
-    popup.style.opacity = 1
-  }, 100)
-  setTimeout(() => {
-    popup.style.opacity = 0
+    const popup = document.createElement("div");
+    popup.classList.add("popup");
+    popup.innerText = "YOU WIN!";
+    document.body.appendChild(popup);
     setTimeout(() => {
-      document.body.removeChild(popup)
-    }, 300)
-  }, 2000)
+        popup.style.opacity = 1;
+    }, 100);
+    setTimeout(() => {
+        popup.style.opacity = 0;
+        setTimeout(() => {
+            document.body.removeChild(popup);
+            resetGame();
+        }, 300);
+    }, 2000);
 }
 
 function showLosePopup() {
@@ -25,18 +45,18 @@ function showLosePopup() {
     popup.classList.add("popup");
     popup.innerText = "YOU LOSE!";
     document.body.appendChild(popup);
-    
     setTimeout(() => {
         popup.style.opacity = 1;
     }, 100);
-
     setTimeout(() => {
         popup.style.opacity = 0;
         setTimeout(() => {
             document.body.removeChild(popup);
+            resetGame();
         }, 300);
     }, 2000);
 }
+
 
 function removePlayer() {
     const player = document.getElementById("player");
@@ -46,48 +66,45 @@ function removePlayer() {
 }
 
 function gameLoop(timestamp) {
-  if (!isPaused) {
-    if (!lastMoveTime) lastMoveTime = timestamp
-    const deltaTime = timestamp - lastMoveTime
-    if (deltaTime > moveInterval) {
-      if (!isMoving) {
-        isMoving = true
-        window.characters.forEach((character) => {
-          window.moveCharacterRandomly(character)
-        })
-        lastMoveTime = timestamp
-      }
-    } else {
-      isMoving = false
+    if (!isPaused) {
+        if (!lastMoveTime) lastMoveTime = timestamp;
+        const deltaTime = timestamp - lastMoveTime;
+
+        if (deltaTime > moveInterval) {
+            window.characters.forEach(character => {
+                window.moveCharacterRandomly(character);
+            });
+            lastMoveTime = timestamp;
+        }
     }
-  }
-  requestAnimationFrame(gameLoop)
+
+    requestAnimationFrame(gameLoop);
 }
 
 function initPlayer() {
-  const player = document.createElement("div")
-  player.id = "player"
+    const player = document.createElement("div")
+    player.id = "player"
 
-  let startX, startY
-  do {
-    startX = Math.floor(window.columns / 2)
-    startY = Math.floor(window.rows / 2)
-  } while (!window.isValidMove(startX, startY))
+    let startX, startY
+    do {
+        startX = Math.floor(window.columns / 2)
+        startY = Math.floor(window.rows / 2)
+    } while (!window.isValidMove(startX, startY))
 
-  console.log("Player Start Position:", startX, startY)
+    console.log("Player Start Position:", startX, startY)
 
-  updatePlayerPosition(player, startX, startY)
+    updatePlayerPosition(player, startX, startY)
 
-  window.tilemapContainer.appendChild(player)
-  player.dataset.x = startX
-  player.dataset.y = startY
+    window.tilemapContainer.appendChild(player)
+    player.dataset.x = startX
+    player.dataset.y = startY
 }
 
 function updatePlayerPosition(player, x, y) {
-  const left = x * window.tileSize + window.tileSize / 2 - player.offsetWidth / 2
-  const top = y * window.tileSize + window.tileSize / 2 - player.offsetHeight / 2
-  player.style.left = `${left}px`
-  player.style.top = `${top}px`
+    const left = x * window.tileSize + window.tileSize / 2 - player.offsetWidth / 2
+    const top = y * window.tileSize + window.tileSize / 2 - player.offsetHeight / 2
+    player.style.left = `${left}px`
+    player.style.top = `${top}px`
 }
 
 function movePlayer(e) {
@@ -118,8 +135,8 @@ function movePlayer(e) {
         player.dataset.y = newY;
         updatePlayerPosition(player, newX, newY);
 
-        if (window.winningCharacter && 
-            newX === window.winningCharacter.position.x && 
+        if (window.winningCharacter &&
+            newX === window.winningCharacter.position.x &&
             newY === window.winningCharacter.position.y) {
 
             showWinPopup();
@@ -138,77 +155,79 @@ function movePlayer(e) {
 
 
 function createPauseMenu() {
-  pauseMenu = document.createElement("div")
-  pauseMenu.classList.add("pause-menu")
-  pauseMenu.style.display = "none"
-  pauseMenu.innerHTML = `
+    pauseMenu = document.createElement("div")
+    pauseMenu.classList.add("pause-menu")
+    pauseMenu.style.display = "none"
+    pauseMenu.innerHTML = `
         <div class="pause-content">
             <h2>Game Paused</h2>
             <button id="resumeButton">Resume</button>
         </div>
     `
-  document.body.appendChild(pauseMenu)
+    document.body.appendChild(pauseMenu)
 
-  const resumeButton = document.getElementById("resumeButton")
-  resumeButton.addEventListener("click", unpauseGame)
+    const resumeButton = document.getElementById("resumeButton")
+    resumeButton.addEventListener("click", unpauseGame)
 }
 
 function showPauseMenu() {
-  if (!pauseMenu) {
-    createPauseMenu()
-  }
-  pauseMenu.style.display = "flex"
-  isPaused = true
+    if (!pauseMenu) {
+        createPauseMenu()
+    }
+    pauseMenu.style.display = "flex"
+    isPaused = true
 }
 
 function hidePauseMenu() {
-  if (pauseMenu) {
-    pauseMenu.style.display = "none"
-  }
-  isPaused = false
+    if (pauseMenu) {
+        pauseMenu.style.display = "none"
+    }
+    isPaused = false
 }
 
 function togglePause() {
-  if (isPaused) {
-    unpauseGame()
-  } else {
-    pauseGame()
-  }
+    if (isPaused) {
+        unpauseGame();
+    } else {
+        pauseGame();
+    }
 }
 
 function pauseGame() {
-  showPauseMenu()
+    if (!gameStarted) return;
+    showPauseMenu()
 }
 
 function unpauseGame() {
-  hidePauseMenu()
-  lastMoveTime = null
-  requestAnimationFrame(gameLoop)
+    hidePauseMenu();
+    lastMoveTime = performance.now();
+    requestAnimationFrame(gameLoop);
 }
 
 window.addEventListener("resize", () => {
-  window.characters.forEach(window.updateCharacterPosition)
-  updatePlayerPosition(
-    document.getElementById("player"),
-    Number.parseInt(document.getElementById("player").dataset.x, 10),
-    Number.parseInt(document.getElementById("player").dataset.y, 10),
-  )
+    window.characters.forEach(window.updateCharacterPosition)
+    updatePlayerPosition(
+        document.getElementById("player"),
+        Number.parseInt(document.getElementById("player").dataset.x, 10),
+        Number.parseInt(document.getElementById("player").dataset.y, 10),
+    )
 })
 
 window.addEventListener("keyup", movePlayer)
 window.addEventListener("blur", pauseGame)
 window.addEventListener("keyup", (e) => {
-  if (e.key === "Escape") {
-    togglePause()
-  }
+    if (e.key === "Escape") {
+        togglePause()
+    }
 })
 
 function initGame() {
-  initPlayer()
-  window.initCharacter()
-  createPauseMenu()
-  requestAnimationFrame(gameLoop)
+    document.getElementById("game-menu").style.display = "none";
+    gameStarted = true;
+    initPlayer();
+    window.initCharacter();
+    createPauseMenu();
+    lastMoveTime = performance.now();
+    requestAnimationFrame(gameLoop);
 }
-
-initGame()
 

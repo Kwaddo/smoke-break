@@ -34,6 +34,8 @@ const mapLayout = [
 ];
 
 function createTilemap() {
+    tilemapContainer.innerHTML = '';
+    
     tilemapContainer.style.width = `${columns * tileSize}px`;
     tilemapContainer.style.height = `${rows * tileSize}px`;
 
