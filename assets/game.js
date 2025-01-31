@@ -215,11 +215,9 @@ function initPlayer() {
 
     let startX, startY
     do {
-        startX = Math.floor(window.columns / 2)
-        startY = Math.floor(window.rows / 2)
+        startX = Math.floor(window.columns / 1.4)
+        startY = Math.floor(window.rows / 2.1)
     } while (!window.isValidMove(startX, startY))
-
-    console.log("Player Start Position:", startX, startY)
 
     updatePlayerPosition(player, startX, startY)
 
@@ -286,25 +284,25 @@ function movePlayer(e) {
 }
 
 function createPauseMenu() {
-    pauseMenu = document.createElement("div")
-    pauseMenu.classList.add("pause-menu")
-    pauseMenu.style.display = "none"
+    pauseMenu = document.createElement("div");
+    pauseMenu.classList.add("pause-menu");
+    pauseMenu.style.display = "none";
     pauseMenu.innerHTML = `
         <div class="pause-content">
             <h2>Game Paused</h2>
-            <button id="resumeButton">Resume</button>
+            <button id="resumeButton">Continue</button>
         </div>
-    `
-    document.body.appendChild(pauseMenu)
+    `;
+    document.body.appendChild(pauseMenu);
 
-    const resumeButton = document.getElementById("resumeButton")
-    resumeButton.addEventListener("click", unpauseGame)
+    const resumeButton = document.getElementById("resumeButton");
+    resumeButton.addEventListener("click", unpauseGame);
 }
 
 function showPauseMenu() {
     if (!gameStarted) return;
     if (!pauseMenu) {
-        createPauseMenu()
+        createPauseMenu();
     }
     pauseMenu.style.display = "flex"
     isPaused = true
@@ -352,7 +350,7 @@ window.addEventListener("keyup", movePlayer)
 window.addEventListener("blur", pauseGame)
 window.addEventListener("keyup", (e) => {
     if (e.key === "Escape") {
-        togglePause()
+        togglePause();
     }
 })
 
