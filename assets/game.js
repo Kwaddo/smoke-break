@@ -58,8 +58,8 @@ function updateCountdown() {
 }
 
 function startCountdown() {
-    countdownTime = 120; 
-    updateCountdown(); 
+    countdownTime = 120;
+    updateCountdown();
 
     countdownInterval = setInterval(() => {
         if (!isPaused) {
@@ -78,7 +78,7 @@ function pauseCountdown() {
 }
 
 function resumeCountdown() {
-    clearInterval(countdownInterval); 
+    clearInterval(countdownInterval);
     countdownInterval = setInterval(() => {
         if (!isPaused) {
             countdownTime--;
@@ -97,7 +97,7 @@ function showWinPopup() {
     popup.innerText = "YOU WIN!";
     document.body.appendChild(popup);
     const finalScore = countdownTime;
-    
+
     pauseCountdown();
     setTimeout(() => {
         popup.style.opacity = 1;
@@ -106,13 +106,67 @@ function showWinPopup() {
         popup.style.opacity = 0;
         setTimeout(() => {
             document.body.removeChild(popup);
+            promptForName(finalScore);
             document.querySelector("#game-menu h1").innerText = `Your Score: ${finalScore}!`;
-            
-            resetGame();
         }, 300);
     }, 2000);
 }
 
+function promptForName(finalScore) {
+    const namePrompt = document.createElement("div");
+    namePrompt.classList.add("name-prompt");
+    namePrompt.innerHTML = `
+        <h2>Enter your name:</h2>
+        <input type="text" id="player-name" placeholder="Your name">
+        <button id="submit-name">Submit</button>
+    `;
+    document.body.appendChild(namePrompt);
+
+    const submitButton = document.getElementById("submit-name");
+    submitButton.addEventListener("click", () => {
+        const playerName = document.getElementById("player-name").value.trim();
+        if (playerName) {
+            const scoreData = {
+                name: playerName,
+                score: finalScore,
+            };
+
+            fetch("/submit-score", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(scoreData),
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log("Score submitted successfully:", data);
+                document.body.removeChild(namePrompt);
+                resetGame();
+            })
+            .catch(error => {
+                console.error("Error submitting score:", error);
+                alert("There was an error submitting your score.");
+            });
+        } else {
+            alert("Please enter a name.");
+        }
+    });
+}
+
+
+function updateLeaderboard(name, score) {
+    const leaderboard = document.getElementById("leaderboard");
+    if (!leaderboard) {
+        const leaderboardContainer = document.createElement("div");
+        leaderboardContainer.id = "leaderboard";
+        document.body.appendChild(leaderboardContainer);
+    }
+    const playerScore = document.createElement("div");
+    playerScore.classList.add("leaderboard-item");
+    playerScore.innerText = `${name}: ${score}`;
+    document.getElementById("leaderboard").appendChild(playerScore);
+}
 
 function showLosePopup() {
     const popup = document.createElement("div");
@@ -131,7 +185,6 @@ function showLosePopup() {
         }, 300);
     }, 2000);
 }
-
 
 function removePlayer() {
     const player = document.getElementById("player");
