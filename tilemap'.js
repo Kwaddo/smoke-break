@@ -61,4 +61,19 @@ function createTilemap() {
     }
 }
 
+function isValidMove(x, y) {
+    if (x < 0 || x >= columns || y < 0 || y >= rows) {
+        return false;
+    }
+    return mapLayout[y][x] === 0;
+}
+
 createTilemap();
+
+window.tileSize = tileSize;
+window.columns = columns;
+window.rows = rows;
+window.tiles = tiles;
+window.mapLayout = mapLayout;
+window.isValidMove = isValidMove;
+window.tilemapContainer = tilemapContainer;
