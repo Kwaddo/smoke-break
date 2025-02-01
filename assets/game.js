@@ -36,8 +36,6 @@ function createCountdownTimer() {
     countdownDisplay = document.createElement("div");
     countdownDisplay.id = "countdown-timer";
     countdownDisplay.style.position = "absolute";
-    countdownDisplay.style.top = "10px";
-    countdownDisplay.style.right = "45%";
     countdownDisplay.style.fontSize = "24px";
     countdownDisplay.style.color = "white";
     countdownDisplay.style.backgroundColor = "rgba(0, 0, 0, 0.7)";

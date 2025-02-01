@@ -7,15 +7,85 @@ html {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #f0f0f0;
+    background: radial-gradient(circle, #444444 20%, #222222 50%, #111111 95%);
+    color: #ccc;
+    overflow: hidden;
+    font-family: "Jersey 10", serif;
 }
 
+p {
+    position: absolute;
+    z-index: 9999;
+    font-size: 8rem;
+    word-spacing: 50rem;
+    font-weight: bold;
+    align-self: flex-start;
+    letter-spacing: 10px;
+    color: rgba(2, 106, 2, 0.519); 
+    text-shadow: 5px 15px 15px black;
+    cursor: default;
+}
+
+.spacing {
+    cursor: default;
+    justify-content: center;
+    position: absolute;
+    margin-right: 73rem;
+    margin-bottom: 8rem;
+}
+
+h1 {
+    width: 20rem;
+    text-align: center;
+}
+
+.arrows {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-left: 4.5rem;
+    z-index: 9999;
+    gap: 5px;
+}
+
+.row {
+    display: flex;
+    gap: 5px;
+}
+
+.arrow {
+    width: 3.3rem;
+    height: 3.3rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px;
+    font-weight: bold;
+    color: #c0c0c0;
+    background: linear-gradient(135deg, #111, #333);
+    border: 2px solid #444;
+    border-radius: 5px;
+    text-shadow: 2px 2px 0px #000;
+    box-shadow: 3px 3px 0px #000, inset 2px 2px 0px #555;
+    font-family: 'Sixtyfour', sans-serif;
+    text-transform: uppercase;
+}
+
+.arrow:hover {
+    background: #00000034;
+}
+
+.arrow.up::before { content: "↑"; }
+.arrow.left::before { content: "←"; }
+.arrow.down::before { content: "↓"; }
+.arrow.right::before { content: "→"; }
+
+
 #game-menu {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    position: absolute;
+    width: 47.1rem;
+    height: 47.1rem;
     background: rgba(0, 0, 0, 0.8);
     display: flex;
     flex-direction: column;
@@ -28,26 +98,43 @@ html {
 }
 
 #game-menu button {
-    background: #28a745;
     color: white;
     border: none;
-    padding: 10px 20px;
+    padding: 25px 35px;
     font-size: 18px;
     cursor: pointer;
-    margin-top: 20px;
-    border-radius: 5px;
+    margin-top: 10rem;
+    border-radius: 10px;
+}
+
+#start-game{
+    font-family: "Sixtyfour", serif;
+    text-shadow: 0 0 10px rgba(0, 255, 0, 0.8), 0 0 20px rgba(0, 255, 0, 0.6);  /* Green glow */
+    background-color: forestgreen;
+    animation: bounce 2s ease-in-out infinite;
+}
+
+@keyframes bounce {
+    0% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+    100% {
+        transform: translateY(0);
+    }
 }
 
 #game-menu button:hover {
-    background: #218838;
+    animation-play-state: paused;
+    background-color: rgb(25, 101, 25);
 }
 
 .pause-menu {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    position: absolute;
+    width: 47.1rem;
+    height: 47.1rem;
     background-color: rgba(0, 0, 0, 0.7);
     display: flex;
     justify-content: center;
@@ -203,6 +290,8 @@ html {
     background-image: url(images/mapv3.png);
     background-repeat: no-repeat;
     background-size: cover;
+    border-radius: 4px;
+    border: 4px solid rgb(82, 82, 82);
 }
 
 .name-prompt {
@@ -217,6 +306,11 @@ html {
     font-size: 20px;
     z-index: 1000;
     text-align: center;
+}
+
+#countdown-timer{
+    z-index: 9999;
+    margin-bottom: 50.7rem;
 }
 
 .name-prompt input {
@@ -245,8 +339,9 @@ html {
 }
 
 #leaderboard-container {
-    margin-top: 20px;
-    padding: 10px;
+    margin-bottom: 8rem;
+    margin-left: 73rem;
+    padding: 2rem;
     background-color: rgba(0, 0, 0, 0.7);
     border-radius: 10px;
 }
