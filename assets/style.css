@@ -21,9 +21,10 @@ p {
     font-weight: bold;
     align-self: flex-start;
     letter-spacing: 10px;
-    color: rgba(2, 106, 2, 0.519); 
+    color: rgba(203, 201, 201, 0.522);
     text-shadow: 5px 15px 15px black;
     cursor: default;
+    
 }
 
 .spacing {
@@ -103,14 +104,14 @@ h1 {
     padding: 25px 35px;
     font-size: 18px;
     cursor: pointer;
-    margin-top: 10rem;
+    margin-top: 12rem;
     border-radius: 10px;
 }
 
 #start-game{
     font-family: "Sixtyfour", serif;
     text-shadow: 0 0 10px rgba(0, 255, 0, 0.8), 0 0 20px rgba(0, 255, 0, 0.6);  /* Green glow */
-    background-color: forestgreen;
+    background-color: rgb(35, 85, 35);
     animation: bounce 2s ease-in-out infinite;
 }
 
