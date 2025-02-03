@@ -1,5 +1,4 @@
 let lastMoveTime = 0
-const moveInterval = 500
 let isMoving = false
 let isPaused = false
 let gameStarted = false
@@ -8,6 +7,7 @@ let countdownTime = 120;
 let countdownInterval;
 let countdownDisplay;
 let score = 0;
+let pressedKeys = new Set();
 
 document.getElementById("start-game").addEventListener("click", () => {
     document.getElementById("game-menu").style.display = "none";
@@ -193,17 +193,16 @@ function removePlayer() {
 
 function gameLoop(timestamp) {
     if (!isPaused) {
-        if (!lastMoveTime) lastMoveTime = timestamp;
-        const deltaTime = timestamp - lastMoveTime;
-
-        if (deltaTime > moveInterval) {
-            window.characters.forEach(character => {
+        window.characters.forEach(character => {
+            if (!character.lastMoveTime) character.lastMoveTime = timestamp;
+            const deltaTime = timestamp - character.lastMoveTime;
+            
+            if (deltaTime > character.moveInterval) {
                 window.moveCharacterRandomly(character);
-            });
-            lastMoveTime = timestamp;
-        }
+                character.lastMoveTime = timestamp;
+            }
+        });
     }
-
     requestAnimationFrame(gameLoop);
 }
 
@@ -344,13 +343,18 @@ window.addEventListener("resize", () => {
     )
 })
 
-window.addEventListener("keyup", movePlayer)
+window.addEventListener("keydown", (e) => {
+    if (pressedKeys.has(e.key)) return;
+    pressedKeys.add(e.key);
+    movePlayer(e);
+});
 window.addEventListener("blur", pauseGame)
 window.addEventListener("keyup", (e) => {
+    pressedKeys.delete(e.key);
     if (e.key === "Escape") {
         togglePause();
     }
-})
+});
 
 function initGame() {
     document.getElementById("game-menu").style.display = "none";

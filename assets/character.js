@@ -9,7 +9,9 @@ function createCharacter(startX, startY) {
     const characterObj = {
         element: character,
         position: { x: startX, y: startY },
-        isWinningCharacter: false 
+        isWinningCharacter: false,
+        moveInterval:  Math.floor(Math.random() * (750 - 250 + 1) + 800),
+        lastMoveTime: 0,
     };
     characters.push(characterObj);
     updateCharacterPosition(characterObj);
