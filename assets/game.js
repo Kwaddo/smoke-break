@@ -16,6 +16,13 @@ document.getElementById("start-game").addEventListener("click", () => {
     initGame();
 });
 
+document.addEventListener("keydown", (e) => {
+    if (e.code === "Space" && !gameStarted) {
+        document.getElementById("game-menu").style.display = "none";
+        initGame();
+    }
+});
+
 function resetGame() {
     window.characters.forEach(character => {
         if (character.element) {
@@ -32,12 +39,6 @@ function resetGame() {
         countdownDisplay = null;
     }
     clearInterval(countdownInterval);
-    document.getElementById("game-menu").style.display = "flex";
-    gameStarted = false;
-    stopAutoMove();
-    if (moveInterval) clearInterval(moveInterval);
-    pressedKeys.clear();
-    currentDirection = null;
     document.getElementById("game-menu").style.display = "flex";
 }
 
@@ -388,13 +389,6 @@ function stopAutoMove() {
 }
 
 window.addEventListener("keydown", (e) => {
-    if (e.key === " " && !gameStarted) {
-        startGame();
-        return;
-    }
-
-    if (!gameStarted) return;
-
     if (pressedKeys.has(e.key)) return;
     pressedKeys.add(e.key);
     
@@ -426,13 +420,4 @@ function initGame() {
     window.startHintSystem();
     lastMoveTime = performance.now();
     requestAnimationFrame(gameLoop);
-}
-
-function startGame() {
-    if (!gameStarted) {
-        gameStarted = true;
-        document.getElementById("game-menu").style.display = "none";
-        window.initCharacter();
-        initPlayer();
-    }
 }
