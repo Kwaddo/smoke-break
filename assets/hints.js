@@ -1,6 +1,6 @@
 let activeHints = [];
 const spawnInterval = 15000; 
-const chance = 0.25;
+const chance = 0.1;
 
 const uselessHints = [
     "The characters are white.",
@@ -17,9 +17,11 @@ function createHint() {
     hint.style.position = "absolute";
     hint.style.width = `${window.tileSize}px`;
     hint.style.height = `${window.tileSize}px`;
-    hint.style.backgroundColor = "#ffeb3b";
-    hint.style.borderRadius = "50%";
-    hint.style.boxShadow = "0 0 10px #fff700";
+    hint.style.backgroundImage = "url('./assets/images/question.svg')";
+    hint.style.backgroundSize = "contain";
+    hint.style.backgroundRepeat = "no-repeat";
+    hint.style.backgroundPosition = "center";
+    hint.style.boxShadow = "0 0 10px rgb(255, 255, 255)";
     hint.style.zIndex = "999";
     hint.style.animation = "pulse 1s infinite";
     let hintX, hintY;
@@ -36,7 +38,7 @@ function createHint() {
     hint.dataset.y = hintY;
 
     if (Math.random() < chance && window.winningCharacter) {
-        const position = `Ahmed is at position (${window.winningCharacter.position.x}, ${window.winningCharacter.position.y})`;
+        const position = `The winning character is ${window.winningCharacter.color} colored`;
         hint.dataset.message = position;
     } else {
         hint.dataset.message = uselessHints[Math.floor(Math.random() * uselessHints.length)];

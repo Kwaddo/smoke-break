@@ -3,7 +3,7 @@ let isMoving = false
 let isPaused = false
 let gameStarted = false
 let pauseMenu
-let countdownTime = 120;
+window.countdownTime = 120;
 let countdownInterval;
 let countdownDisplay;
 let score = 0;
@@ -46,25 +46,25 @@ function createCountdownTimer() {
 }
 
 function updateCountdown() {
-    const minutes = Math.floor(countdownTime / 60);
-    const seconds = countdownTime % 60;
+    const minutes = Math.floor(window.countdownTime / 60);
+    const seconds = window.countdownTime % 60;
     countdownDisplay.innerText = `Time Left: ${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
 
-    if (countdownTime <= 0) {
+    if (window.countdownTime <= 0) {
         clearInterval(countdownInterval);
         showLosePopup();
     }
 }
 
 function startCountdown() {
-    countdownTime = 120;
+    window.countdownTime = 120;
     updateCountdown();
 
     countdownInterval = setInterval(() => {
         if (!isPaused) {
-            countdownTime--;
+            window.countdownTime--;
             updateCountdown();
-            if (countdownTime <= 0) {
+            if (window.countdownTime <= 0) {
                 clearInterval(countdownInterval);
                 showLosePopup();
             }
@@ -80,9 +80,9 @@ function resumeCountdown() {
     clearInterval(countdownInterval);
     countdownInterval = setInterval(() => {
         if (!isPaused) {
-            countdownTime--;
+            window.countdownTime--;
             updateCountdown();
-            if (countdownTime <= 0) {
+            if (window.countdownTime <= 0) {
                 clearInterval(countdownInterval);
                 showLosePopup();
             }
@@ -95,7 +95,8 @@ function showWinPopup() {
     popup.classList.add("popup");
     popup.innerText = "YOU WIN!";
     document.body.appendChild(popup);
-    const finalScore = countdownTime;
+    removePlayer();
+    const finalScore = window.countdownTime;
 
     pauseCountdown();
     setTimeout(() => {
@@ -285,17 +286,27 @@ function movePlayer(e) {
 function createPauseMenu() {
     pauseMenu = document.createElement("div");
     pauseMenu.classList.add("pause-menu");
-    pauseMenu.style.display = "none";
-    pauseMenu.innerHTML = `
-        <div class="pause-content">
-            <h2>Game Paused</h2>
-            <button id="resumeButton">Continue</button>
-        </div>
+    
+    const content = document.createElement("div");
+    content.classList.add("pause-content");
+    
+    content.innerHTML = `
+        <h2>Game Paused</h2>
+        <button id="resumeButton">Continue</button>
+        <button id="resetButton">Reset Game</button>
     `;
+    
+    pauseMenu.appendChild(content);
     document.body.appendChild(pauseMenu);
 
-    const resumeButton = document.getElementById("resumeButton");
-    resumeButton.addEventListener("click", unpauseGame);
+    document.getElementById("resumeButton").addEventListener("click", () => {
+        unpauseGame();
+    });
+
+    document.getElementById("resetButton").addEventListener("click", () => {
+        hidePauseMenu();
+        resetGame();
+    });
 }
 
 function showPauseMenu() {
@@ -303,8 +314,8 @@ function showPauseMenu() {
     if (!pauseMenu) {
         createPauseMenu();
     }
-    pauseMenu.style.display = "flex"
-    isPaused = true
+    pauseMenu.style.display = "flex";
+    isPaused = true;
 }
 
 function hidePauseMenu() {
@@ -363,7 +374,6 @@ function initGame() {
     gameStarted = true;
     initPlayer();
     window.initCharacter();
-    createPauseMenu();
     createCountdownTimer();
     startCountdown();
     window.startHintSystem();

@@ -1,17 +1,39 @@
 let characters = [];
-const numCharacters = 5;
+const numCharacters = 7;
 let winningCharacter = null; 
+
+const characterColors = [
+    '#FF0000', // Red
+    '#00FF00', // Green
+    '#0000FF', // Blue
+    '#FFFF00', // Yellow
+    '#FF00FF', // Magenta
+    '#00FFFF', // Cyan
+    '#FFA500'  // Orange
+];
+
+function isOccupiedByCharacter(x, y, excludeChar = null) {
+    return characters.some(char => 
+        char !== excludeChar && 
+        char.position.x === x && 
+        char.position.y === y
+    );
+}
 
 function createCharacter(startX, startY) {
     const character = document.createElement('div');
     character.classList.add('character');
+    const color = characterColors[characters.length];
+    character.style.backgroundColor = color;
     window.tilemapContainer.appendChild(character);
+    
     const characterObj = {
         element: character,
         position: { x: startX, y: startY },
         isWinningCharacter: false,
         moveInterval:  Math.floor(Math.random() * (750 - 250 + 1) + 800),
         lastMoveTime: 0,
+        color: color
     };
     characters.push(characterObj);
     updateCharacterPosition(characterObj);
@@ -43,7 +65,7 @@ function moveCharacterRandomly(characterObj) {
     for (let direction of shuffledDirections) {
         const newX = characterObj.position.x + direction.x;
         const newY = characterObj.position.y + direction.y;
-        if (window.isValidMove(newX, newY)) {
+        if (window.isValidMove(newX, newY) && !isOccupiedByCharacter(newX, newY, characterObj)) {
             characterObj.position.x = newX;
             characterObj.position.y = newY;
             updateCharacterPosition(characterObj);
@@ -71,7 +93,7 @@ function initCharacter() {
         do {
             startX = Math.floor(Math.random() * window.columns);
             startY = Math.floor(Math.random() * window.rows);
-        } while (!window.isValidMove(startX, startY));
+        } while (!window.isValidMove(startX, startY) || isOccupiedByCharacter(startX, startY));
         createCharacter(startX, startY);
     }
     winningCharacter = characters[Math.floor(Math.random() * characters.length)];
