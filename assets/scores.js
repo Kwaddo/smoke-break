@@ -5,23 +5,17 @@ async function fetchScores(page = 1) {
     try {
         const response = await fetch(`/scores?page=${page}`);
         const data = await response.json();
-        
-        const scores = data.sort((a, b) => b.score - a.score); 
-        displayLeaderboard(scores, page);
+        displayLeaderboard(data.scores, page, data.totalScores);
     } catch (error) {
         console.error("Error fetching scores:", error);
     }
 }
 
-function displayLeaderboard(scores, page) {
+function displayLeaderboard(scores, page, totalScores) {
     const leaderboard = document.getElementById("leaderboard");
-    const startIndex = (page - 1) * scoresPerPage;
-    const endIndex = startIndex + scoresPerPage;
-    const topScores = scores.slice(startIndex, endIndex);
-
     leaderboard.innerHTML = '';
 
-    topScores.forEach(score => {
+    scores.forEach(score => {
         const scoreElement = document.createElement("div");
         scoreElement.classList.add("leaderboard-item");
         scoreElement.innerText = `${score.name}: ${score.score}`;
@@ -31,19 +25,20 @@ function displayLeaderboard(scores, page) {
     const prevButton = document.getElementById("prev-page");
     const nextButton = document.getElementById("next-page");
 
-    prevButton.disabled = page === 1;
-    nextButton.disabled = endIndex >= scores.length;
+    prevButton.disabled = page <= 1;
+    nextButton.disabled = page >= Math.ceil(totalScores / scoresPerPage);
 
     prevButton.onclick = () => {
         if (page > 1) {
-            fetchScores(page - 1);
             currentPage = page - 1;
+            fetchScores(currentPage);
         }
     };
+
     nextButton.onclick = () => {
-        if (endIndex < scores.length) {
-            fetchScores(page + 1);
+        if (page < Math.ceil(totalScores / scoresPerPage)) {
             currentPage = page + 1;
+            fetchScores(currentPage);
         }
     };
 }

@@ -13,7 +13,7 @@ html {
     font-family: "Jersey 10", serif;
 }
 
-p {
+.title-text {
     position: absolute;
     z-index: 9999;
     font-size: 8rem;
@@ -24,7 +24,6 @@ p {
     color: rgba(203, 201, 201, 0.522);
     text-shadow: 5px 15px 15px black;
     cursor: default;
-    
 }
 
 .spacing {
@@ -416,4 +415,41 @@ h1 {
 
 #pagination-controls button:hover{
     background-color: #575757;
+}
+
+.menu {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.start-text {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    align-self: flex-start;
+    position: absolute;
+    z-index: 9999;
+    color: rgb(255, 255, 255);
+    text-shadow: 5px 15px 15px black;
+    cursor: default;
+}
+
+.loading {
+    display: inline-block;
+    width: 50px;
+    height: 50px;
+    border: 3px solid rgba(255,255,255,.3);
+    border-radius: 50%;
+    border-top-color: #fff;
+    animation: spin 1s ease-in-out infinite;
+    margin: 20px auto;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
 }

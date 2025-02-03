@@ -99,7 +99,11 @@ function checkHintCollision(playerX, playerY) {
         if (playerX === hintX && playerY === hintY) {
             const popup = document.createElement("div");
             popup.classList.add("popup");
-            popup.innerText = hint.dataset.message;
+            if (hintScore === 10) {
+                popup.innerText = hint.dataset.message + "\n\nYou're getting close to finding Ahmed!";
+            } else {
+                popup.innerText = hint.dataset.message;
+            }
             document.body.appendChild(popup);
             popup.style.opacity = 1;
             hint.remove();

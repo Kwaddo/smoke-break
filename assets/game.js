@@ -103,6 +103,7 @@ function showWinPopup() {
     const popup = document.createElement("div");
     popup.classList.add("popup");
     popup.innerText = "YOU WIN!";
+    document.querySelector(".start-text").innerText = "I finally found him! Ahmed, I need you to audit me for this project. What do you mean after you're done smoking?";
     document.body.appendChild(popup);
     removePlayer();
     const finalScore = window.countdownTime + window.hintScore;
@@ -117,6 +118,7 @@ function showWinPopup() {
             document.body.removeChild(popup);
             promptForName(finalScore);
             document.querySelector("#game-menu h1").innerText = `Your Score: ${finalScore}!`;
+            document.getElementById("start-game").innerText = "Try Again?";
         }, 300);
     }, 2000);
 }
@@ -183,6 +185,7 @@ function showLosePopup() {
     const popup = document.createElement("div");
     popup.classList.add("popup");
     popup.innerText = "YOU LOSE!";
+    document.querySelector(".start-text").innerText = "Where in the love of God is he? I actually can't find him! I guess he's not here? I'll just return to the campus and wait for him there. Dangit.";
     document.body.appendChild(popup);
     pauseCountdown();
     setTimeout(() => {
@@ -192,6 +195,7 @@ function showLosePopup() {
         popup.style.opacity = 0;
         setTimeout(() => {
             document.body.removeChild(popup);
+            document.getElementById("start-game").innerText = "Try Again?";
             resetGame();
         }, 300);
     }, 2000);

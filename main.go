@@ -60,60 +60,79 @@ func serveDouble(w http.ResponseWriter, r *http.Request) {
 }
 
 func serveScores(w http.ResponseWriter, r *http.Request) {
-	pageParam := r.URL.Query().Get("page")
-	if pageParam == "" {
-		pageParam = "1" 
-	}
-	page, err := strconv.Atoi(pageParam)
-	if err != nil || page < 1 {
-		http.Error(w, "Invalid page number", http.StatusBadRequest)
-		return
-	}
-	scoresPerPage := 5
-	startIndex := (page - 1) * scoresPerPage
-	endIndex := startIndex + scoresPerPage
-	query := client.Collection("scores").OrderBy("score", firestore.Desc) 
-	iter := query.Documents(context.Background())
-	var leaderboard []struct {
-		Name  string `json:"name"`
-		Score int    `json:"score"`
-	}
-	for {
-		doc, err := iter.Next()
-		if err == iterator.Done {
-			break 
-		}
-		if err != nil {
-			http.Error(w, fmt.Sprintf("Error retrieving leaderboard: %v", err), http.StatusInternalServerError)
-			return
-		}
-		var scoreData struct {
-			Name  string `json:"name"`
-			Score int    `json:"score"`
-		}
+    pageParam := r.URL.Query().Get("page")
+    if pageParam == "" {
+        pageParam = "1"
+    }
+    page, err := strconv.Atoi(pageParam)
+    if err != nil || page < 1 {
+        http.Error(w, "Invalid page number", http.StatusBadRequest)
+        return
+    }
+    
+    scoresPerPage := 5
+    startIndex := (page - 1) * scoresPerPage
 
-		err = doc.DataTo(&scoreData)
-		if err != nil {
-			http.Error(w, fmt.Sprintf("Error decoding document data: %v", err), http.StatusInternalServerError)
-			return
-		}
+    countQuery := client.Collection("scores").Documents(context.Background())
+    var totalCount int
+    for {
+        _, err := countQuery.Next()
+        if err == iterator.Done {
+            break
+        }
+        if err != nil {
+            http.Error(w, fmt.Sprintf("Error counting documents: %v", err), http.StatusInternalServerError)
+            return
+        }
+        totalCount++
+    }
 
-		leaderboard = append(leaderboard, scoreData)
-	}
-	if startIndex < len(leaderboard) {
-		if endIndex > len(leaderboard) {
-			endIndex = len(leaderboard)
-		}
-		leaderboard = leaderboard[startIndex:endIndex]
-	} else {
-		leaderboard = []struct {
-			Name  string `json:"name"`
-			Score int    `json:"score"`
-		}{}
-	}
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(leaderboard)
+    query := client.Collection("scores").
+        OrderBy("score", firestore.Desc).
+        Limit(scoresPerPage).
+        Offset(startIndex)
+    
+    iter := query.Documents(context.Background())
+    var leaderboard []struct {
+        Name  string `json:"name"`
+        Score int    `json:"score"`
+    }
+
+    for {
+        doc, err := iter.Next()
+        if err == iterator.Done {
+            break
+        }
+        if err != nil {
+            http.Error(w, fmt.Sprintf("Error retrieving leaderboard: %v", err), http.StatusInternalServerError)
+            return
+        }
+
+        var scoreData struct {
+            Name  string `json:"name"`
+            Score int    `json:"score"`
+        }
+        if err := doc.DataTo(&scoreData); err != nil {
+            http.Error(w, fmt.Sprintf("Error decoding document data: %v", err), http.StatusInternalServerError)
+            return
+        }
+        leaderboard = append(leaderboard, scoreData)
+    }
+
+    response := struct {
+        Scores []struct {
+            Name  string `json:"name"`
+            Score int    `json:"score"`
+        } `json:"scores"`
+        TotalScores int `json:"totalScores"`
+    }{
+        Scores:      leaderboard,
+        TotalScores: totalCount,
+    }
+
+    w.Header().Set("Content-Type", "application/json")
+    w.WriteHeader(http.StatusOK)
+    json.NewEncoder(w).Encode(response)
 }
 
 func submitScore(w http.ResponseWriter, r *http.Request) {
