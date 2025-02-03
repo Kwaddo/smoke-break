@@ -19,8 +19,8 @@ const colorNames = {
     '#228B22': 'Green',
     '#DC143C': 'Red',
     '#800000': 'Red',
-    '#DAA520': 'Goldenrod',
-    '#B8860B': 'Goldenrod'
+    '#DAA520': 'Golden',
+    '#B8860B': 'Golden'
 };
 
 const hintTypes = {
