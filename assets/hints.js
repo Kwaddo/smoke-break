@@ -1,6 +1,7 @@
 let activeHints = [];
 const spawnInterval = 5000; 
 const chance = 0.1;
+let hintScore = 0;
 
 const uselessHints = [
     "The characters are white.",
@@ -76,7 +77,7 @@ function checkHintCollision(playerX, playerY) {
             popup.style.opacity = 1;
             hint.remove();
             activeHints.splice(index, 1);
-            window.countdownTime += 5;
+            hintScore += 5;
             window.updateCountdown();
             setTimeout(() => {
                 popup.style.opacity = 0;
@@ -102,3 +103,4 @@ function clearHints() {
 window.clearHints = clearHints;
 window.checkHintCollision = checkHintCollision;
 window.startHintSystem = startHintSystem;
+window.hintScore = hintScore;

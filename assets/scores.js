@@ -48,4 +48,5 @@ function displayLeaderboard(scores, page) {
     };
 }
 
+window.fetchScores = fetchScores;
 fetchScores(currentPage);

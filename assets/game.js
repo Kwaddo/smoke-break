@@ -3,7 +3,7 @@ let isMoving = false
 let isPaused = false
 let gameStarted = false
 let pauseMenu
-window.countdownTime = 120;
+window.countdownTime = 180;
 let countdownInterval;
 let countdownDisplay;
 let score = 0;
@@ -57,7 +57,7 @@ function updateCountdown() {
 }
 
 function startCountdown() {
-    window.countdownTime = 120;
+    window.countdownTime = 180;
     updateCountdown();
 
     countdownInterval = setInterval(() => {
@@ -96,7 +96,7 @@ function showWinPopup() {
     popup.innerText = "YOU WIN!";
     document.body.appendChild(popup);
     removePlayer();
-    const finalScore = window.countdownTime;
+    const finalScore = window.countdownTime + window.hintScore;
 
     pauseCountdown();
     setTimeout(() => {
@@ -142,6 +142,8 @@ function promptForName(finalScore) {
             .then(data => {
                 console.log("Score submitted successfully:", data);
                 document.body.removeChild(namePrompt);
+                window.currentPage = 1;
+                window.fetchScores(1);
                 resetGame();
             })
             .catch(error => {
