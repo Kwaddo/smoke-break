@@ -21,6 +21,7 @@ function resetGame() {
         }
     });
     window.characters = [];
+    window.clearHints();
     removePlayer();
     window.winningCharacter = null;
     gameStarted = false;
@@ -258,6 +259,7 @@ function movePlayer(e) {
         player.dataset.x = newX;
         player.dataset.y = newY;
         updatePlayerPosition(player, newX, newY);
+        window.checkHintCollision(newX, newY);
         setTimeout(() => {
             player.classList.remove("moving");
         }, 400);
@@ -364,6 +366,7 @@ function initGame() {
     createPauseMenu();
     createCountdownTimer();
     startCountdown();
+    window.startHintSystem();
     lastMoveTime = performance.now();
     requestAnimationFrame(gameLoop);
 }
