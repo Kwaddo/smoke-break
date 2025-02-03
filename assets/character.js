@@ -1,21 +1,22 @@
 let characters = [];
-const numCharacters = 7;
-let winningCharacter = null; 
+const numCharacters = 8;
+let winningCharacter = null;
 
 const characterColors = [
-    '#FF0000', // Red
-    '#00FF00', // Green
-    '#0000FF', // Blue
-    '#FFFF00', // Yellow
-    '#FF00FF', // Magenta
-    '#00FFFF', // Cyan
-    '#FFA500'  // Orange
+    '#87CEEB', // Sky Blue
+    '#000080', // Navy Blue
+    '#32CD32', // Lime Green
+    '#228B22', // Forest Green
+    '#DC143C', // Crimson Red
+    '#800000', // Maroon
+    '#DAA520', // Goldenrod
+    '#B8860B'  // Dark Goldenrod
 ];
 
 function isOccupiedByCharacter(x, y, excludeChar = null) {
-    return characters.some(char => 
-        char !== excludeChar && 
-        char.position.x === x && 
+    return characters.some(char =>
+        char !== excludeChar &&
+        char.position.x === x &&
         char.position.y === y
     );
 }
@@ -26,12 +27,12 @@ function createCharacter(startX, startY) {
     const color = characterColors[characters.length];
     character.style.backgroundColor = color;
     window.tilemapContainer.appendChild(character);
-    
+
     const characterObj = {
         element: character,
         position: { x: startX, y: startY },
         isWinningCharacter: false,
-        moveInterval:  Math.floor(Math.random() * (750 - 250 + 1) + 800),
+        moveInterval: Math.floor(Math.random() * (750 - 250 + 1) + 800),
         lastMoveTime: 0,
         color: color
     };
@@ -53,7 +54,7 @@ function updateCharacterPosition(characterObj) {
 }
 
 function moveCharacterRandomly(characterObj) {
-    if (!window.characters.includes(characterObj)) return; 
+    if (!window.characters.includes(characterObj)) return;
 
     const directions = [
         { x: 0, y: -1 },

@@ -4,7 +4,7 @@ const chance = 0.1;
 let hintScore = 0;
 
 const uselessHints = [
-    "The characters are white.",
+    "The characters are many colors!",
     "Use arrow keys to move.",
     "Don't touch the other characters!",
     "The walls are black.",
@@ -13,17 +13,34 @@ const uselessHints = [
 ];
 
 const colorNames = {
-    '#FF0000': 'Red',
-    '#00FF00': 'Green',
-    '#0000FF': 'Blue',
-    '#FFFF00': 'Yellow',
-    '#FF00FF': 'Magenta',
-    '#00FFFF': 'Cyan',
-    '#FFA500': 'Orange'
+    '#87CEEB': 'Blue',
+    '#000080': 'Blue',
+    '#32CD32': 'Green',
+    '#228B22': 'Green',
+    '#DC143C': 'Red',
+    '#800000': 'Red',
+    '#DAA520': 'Goldenrod',
+    '#B8860B': 'Goldenrod'
+};
+
+const hintTypes = {
+    QUADRANT: 0.25,
+    COLOR: 0.25,
+    USELESS: 0.50
 };
 
 function getColorName(hexColor) {
     return colorNames[hexColor] || 'Unknown';
+}
+
+function getQuadrant(x, y) {
+    const midX = Math.floor(window.columns / 2);
+    const midY = Math.floor(window.rows / 2);
+    
+    if (x < midX && y < midY) return "top left";
+    if (x >= midX && y < midY) return "top right";
+    if (x < midX && y >= midY) return "bottom left";
+    return "bottom right";
 }
 
 function createHint() {
@@ -52,10 +69,20 @@ function createHint() {
     hint.dataset.x = hintX;
     hint.dataset.y = hintY;
 
-    if (Math.random() < chance && window.winningCharacter) {
-        const colorName = getColorName(window.winningCharacter.color);
-        const position = `Look for the ${colorName.toLowerCase()} character!`;
-        hint.dataset.message = position;
+    const random = Math.random();
+    if (window.winningCharacter) {
+        if (random < hintTypes.QUADRANT) {
+            const quadrant = getQuadrant(
+                window.winningCharacter.position.x,
+                window.winningCharacter.position.y
+            );
+            hint.dataset.message = `The winning character is in the ${quadrant} quadrant!`;
+        } else if (random < hintTypes.QUADRANT + hintTypes.COLOR) {
+            const colorName = getColorName(window.winningCharacter.color);
+            hint.dataset.message = `Look for the ${colorName.toLowerCase()} character!`;
+        } else {
+            hint.dataset.message = uselessHints[Math.floor(Math.random() * uselessHints.length)];
+        }
     } else {
         hint.dataset.message = uselessHints[Math.floor(Math.random() * uselessHints.length)];
     }

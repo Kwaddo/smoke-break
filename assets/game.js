@@ -8,6 +8,8 @@ let countdownInterval;
 let countdownDisplay;
 let score = 0;
 let pressedKeys = new Set();
+let moveInterval = null;
+let currentDirection = null;
 
 document.getElementById("start-game").addEventListener("click", () => {
     document.getElementById("game-menu").style.display = "none";
@@ -358,14 +360,44 @@ window.addEventListener("resize", () => {
     )
 })
 
+function startAutoMove(direction) {
+    if (moveInterval) clearInterval(moveInterval);
+    
+    const moveEvent = { key: direction };
+    movePlayer(moveEvent);
+    
+    moveInterval = setInterval(() => {
+        if (!isPaused) {
+            movePlayer(moveEvent);
+        }
+    }, 250);
+}
+
+function stopAutoMove() {
+    if (moveInterval) {
+        clearInterval(moveInterval);
+        moveInterval = null;
+    }
+    currentDirection = null;
+}
+
 window.addEventListener("keydown", (e) => {
     if (pressedKeys.has(e.key)) return;
     pressedKeys.add(e.key);
-    movePlayer(e);
+    
+    if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(e.key)) {
+        if (currentDirection !== e.key) {
+            currentDirection = e.key;
+            startAutoMove(e.key);
+        }
+    }
 });
-window.addEventListener("blur", pauseGame)
+
 window.addEventListener("keyup", (e) => {
     pressedKeys.delete(e.key);
+    if (e.key === currentDirection) {
+        stopAutoMove();
+    }
     if (e.key === "Escape") {
         togglePause();
     }
