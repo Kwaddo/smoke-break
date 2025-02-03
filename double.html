@@ -4,14 +4,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Deathmatch</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Multiplayer Mode</title>
+    <link rel="stylesheet" href="./assets/style.css">
 </head>
 
 <body>
-    <div id="game-menu">
-        <h1>It's in progress!</h1>
+    <div class="spacing">
+        <h1>Controls</h1>
+        <div>Player 1: Arrow Keys</div>
+        <div>Player 2: WASD</div>
     </div>
+    
+    <div id="game-menu">
+        <br><br><br>
+        <button id="start-game">Start Game</button>
+    </div>
+    <div id="tilemap-container"></div>
+    <div class="map"></div>
+    <script src="./assets/tilemap.js"></script>
+    <script src="./assets/multiplayer.js"></script>
 </body>
 
 </html>
