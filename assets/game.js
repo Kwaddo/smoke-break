@@ -33,6 +33,12 @@ function resetGame() {
     }
     clearInterval(countdownInterval);
     document.getElementById("game-menu").style.display = "flex";
+    gameStarted = false;
+    stopAutoMove();
+    if (moveInterval) clearInterval(moveInterval);
+    pressedKeys.clear();
+    currentDirection = null;
+    document.getElementById("game-menu").style.display = "flex";
 }
 
 function createCountdownTimer() {
@@ -382,6 +388,13 @@ function stopAutoMove() {
 }
 
 window.addEventListener("keydown", (e) => {
+    if (e.key === " " && !gameStarted) {
+        startGame();
+        return;
+    }
+
+    if (!gameStarted) return;
+
     if (pressedKeys.has(e.key)) return;
     pressedKeys.add(e.key);
     
@@ -413,4 +426,13 @@ function initGame() {
     window.startHintSystem();
     lastMoveTime = performance.now();
     requestAnimationFrame(gameLoop);
+}
+
+function startGame() {
+    if (!gameStarted) {
+        gameStarted = true;
+        document.getElementById("game-menu").style.display = "none";
+        window.initCharacter();
+        initPlayer();
+    }
 }

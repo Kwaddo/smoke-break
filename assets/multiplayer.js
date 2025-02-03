@@ -181,6 +181,8 @@ window.addEventListener("keydown", (e) => {
         movePlayer1(e);
     } else if (e.key === "Escape") {
         isPaused = !isPaused;
+    } else if (e.key === " " && !gameStarted) {
+        initMultiplayerGame();
     }
 });
 

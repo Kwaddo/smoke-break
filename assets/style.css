@@ -112,7 +112,7 @@ h1 {
 #start-game{
     font-family: "Sixtyfour", serif;
     margin-bottom: 3rem;
-    text-shadow: 0 0 10px rgba(0, 255, 0, 0.8), 0 0 20px rgba(0, 255, 0, 0.6);  /* Green glow */
+    text-shadow: 0 0 10px rgba(0, 255, 0, 0.8), 0 0 20px rgba(0, 255, 0, 0.6);
     background-color: rgb(35, 85, 35);
     animation: bounce 2s ease-in-out infinite;
 }
