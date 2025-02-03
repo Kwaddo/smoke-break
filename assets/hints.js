@@ -1,5 +1,5 @@
 let activeHints = [];
-const spawnInterval = 15000; 
+const spawnInterval = 5000; 
 const chance = 0.1;
 
 const uselessHints = [
@@ -10,6 +10,20 @@ const uselessHints = [
     "Press ESC to pause.",
     "Time is running out!",
 ];
+
+const colorNames = {
+    '#FF0000': 'Red',
+    '#00FF00': 'Green',
+    '#0000FF': 'Blue',
+    '#FFFF00': 'Yellow',
+    '#FF00FF': 'Magenta',
+    '#00FFFF': 'Cyan',
+    '#FFA500': 'Orange'
+};
+
+function getColorName(hexColor) {
+    return colorNames[hexColor] || 'Unknown';
+}
 
 function createHint() {
     const hint = document.createElement("div");
@@ -38,7 +52,8 @@ function createHint() {
     hint.dataset.y = hintY;
 
     if (Math.random() < chance && window.winningCharacter) {
-        const position = `The winning character is ${window.winningCharacter.color} colored`;
+        const colorName = getColorName(window.winningCharacter.color);
+        const position = `Look for the ${colorName.toLowerCase()} character!`;
         hint.dataset.message = position;
     } else {
         hint.dataset.message = uselessHints[Math.floor(Math.random() * uselessHints.length)];
@@ -61,7 +76,7 @@ function checkHintCollision(playerX, playerY) {
             popup.style.opacity = 1;
             hint.remove();
             activeHints.splice(index, 1);
-            window.countdownTime += 10;
+            window.countdownTime += 5;
             window.updateCountdown();
             setTimeout(() => {
                 popup.style.opacity = 0;
