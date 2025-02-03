@@ -291,9 +291,6 @@ h1 {
     transition: left 0.1s, top 0.1s;
 }
 
-.character.winning-character {
-}
-
 .popup {
     position: fixed;
     top: 50%;
