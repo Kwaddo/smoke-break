@@ -138,7 +138,7 @@ function moveWinningCharacter(e) {
         if (player1 && 
             newX === parseInt(player1.dataset.x) && 
             newY === parseInt(player1.dataset.y)) {
-            showWinPopup("Player 2 Wins!");
+            showWinPopup("Ahmed Wins!");
             resetGame();
         }
     }
@@ -153,7 +153,7 @@ function gameLoop(timestamp) {
         timerElement.textContent = `Time: ${remainingTime}s`;
         
         if (remainingTime === 0) {
-            showWinPopup("Time's Up - Player 2 Wins!");
+            showWinPopup("Time's Up - Ahmed Wins!");
             resetGame();
             return;
         }
@@ -241,7 +241,7 @@ function movePlayer1(e) {
             if (!character.isWinningCharacter && 
                 newX === character.position.x && 
                 newY === character.position.y) {
-                showWinPopup("Player 2 Wins!");
+                showWinPopup("Ahmed Wins!");
                 resetGame();
                 return;
             }
@@ -250,7 +250,7 @@ function movePlayer1(e) {
         if (winningCharacter &&
             newX === winningCharacter.position.x &&
             newY === winningCharacter.position.y) {
-            showWinPopup("Player 1 Wins!");
+            showWinPopup("Student Wins!");
             resetGame();
         }
 
