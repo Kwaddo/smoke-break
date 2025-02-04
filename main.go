@@ -33,8 +33,8 @@ func main() {
 	defer client.Close()
 	http.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir("assets"))))
 	http.HandleFunc("/", serveIndex)
-	http.HandleFunc("/single.html", serveSingle)
-	http.HandleFunc("/double.html", serveDouble)
+	http.HandleFunc("/single", serveSingle)
+	http.HandleFunc("/double", serveDouble)
 	http.HandleFunc("/scores", serveScores)
 	http.HandleFunc("/submit-score", submitScore)
 
