@@ -7,6 +7,7 @@ import (
 	"log"
 	"strconv"
 	"net/http"
+	"strings"
 	"firebase.google.com/go"
 	"google.golang.org/api/option"
 	"cloud.google.com/go/firestore"
@@ -15,10 +16,73 @@ import (
 
 var client *firestore.Client
 
+var validPaths = map[string]bool{
+    "/":        true,
+    "/single":  true,
+    "/double":  true,
+}
+
 type Score struct {
 	Name      string `json:"name"`
 	Score     int64  `json:"score"`
 	Timestamp string `json:"timestamp"`
+}
+
+func middleware(next http.HandlerFunc) http.HandlerFunc {
+    return func(w http.ResponseWriter, r *http.Request) {
+        if strings.HasPrefix(r.URL.Path, "/assets/") {
+            if strings.HasSuffix(r.URL.Path, "/") {
+                http.Redirect(w, r, "/", http.StatusSeeOther)
+                return
+            }
+            referer := r.Header.Get("Referer")
+            if referer == "" {
+                http.Redirect(w, r, "/", http.StatusSeeOther)
+                return
+            }
+            refererPath := strings.TrimPrefix(referer, "http://"+r.Host)
+            if !validPaths[refererPath] {
+                http.Redirect(w, r, "/", http.StatusSeeOther)
+                return
+            }
+            w.Header().Set("X-Content-Type-Options", "nosniff")
+            next(w, r)
+            return
+        }
+        if r.URL.Path == "/scores" || r.URL.Path == "/submit-score" {
+            if r.Header.Get("X-Requested-With") != "XMLHttpRequest" {
+                http.Redirect(w, r, "/", http.StatusSeeOther)
+                return
+            }
+        }
+        if !validPaths[r.URL.Path] {
+            http.Redirect(w, r, "/", http.StatusSeeOther)
+            return
+        }
+
+        next(w, r)
+    }
+}
+
+func customFileServer(fs http.Handler) http.HandlerFunc {
+    return func(w http.ResponseWriter, r *http.Request) {
+        referer := r.Header.Get("Referer")
+        if referer == "" {
+            http.Redirect(w, r, "/", http.StatusSeeOther)
+            return
+        }
+        refererPath := strings.TrimPrefix(referer, "http://"+r.Host)
+        if !validPaths[refererPath] {
+            http.Redirect(w, r, "/", http.StatusSeeOther)
+            return
+        }
+        if strings.HasSuffix(r.URL.Path, "/") {
+            http.Redirect(w, r, "/", http.StatusSeeOther)
+            return
+        }
+        w.Header().Set("X-Content-Type-Options", "nosniff")
+        fs.ServeHTTP(w, r)
+    }
 }
 
 func main() {
@@ -32,12 +96,14 @@ func main() {
 		log.Fatalf("error getting Firestore client: %v", err)
 	}
 	defer client.Close()
-	http.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir("assets"))))
-	http.HandleFunc("/", serveIndex)
-	http.HandleFunc("/single", serveSingle)
-	http.HandleFunc("/double", serveDouble)
-	http.HandleFunc("/scores", serveScores)
-	http.HandleFunc("/submit-score", submitScore)
+    fs := http.StripPrefix("/assets/", http.FileServer(http.Dir("assets")))
+    http.HandleFunc("/assets/", customFileServer(fs))
+	
+	http.HandleFunc("/", middleware(serveIndex))
+	http.HandleFunc("/single", middleware(serveSingle))
+	http.HandleFunc("/double", middleware(serveDouble))
+	http.HandleFunc("/scores", middleware(serveScores))
+	http.HandleFunc("/submit-score", middleware(submitScore))
 
 	port := ":6776"
 	log.Printf("Starting server on %s...", port)

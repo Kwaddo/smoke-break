@@ -3,7 +3,11 @@ const scoresPerPage = 5;
 
 async function fetchScores(page = 1) {
     try {
-        const response = await fetch(`/scores?page=${page}`);
+        const response = await fetch(`/scores?page=${page}`, {
+            headers: {
+                "X-Requested-With": "XMLHttpRequest"
+            }
+        });
         const data = await response.json();
         console.log("Received scores data:", data);
         displayLeaderboard(data.scores, page, data.totalScores);
