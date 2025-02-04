@@ -1,4 +1,40 @@
-const characterColors = ['#FF0000', '#00FF00', '#0000FF', '#FFFF00', '#FF00FF', '#00FFFF', '#FFA500', '#800080'];
+const mapColorSchemes = {
+    map1: [ // Afternoon colors
+        '#FF9966', // Sunset Orange
+        '#FFB366', // Light Orange
+        '#FF8533', // Deep Orange
+        '#FF6600', // Bright Orange
+        '#CC5200', // Dark Orange
+        '#FF944D', // Peach
+        '#FF7F2A', // Tangerine
+        '#CC6600'  // Brown Orange
+    ],
+    map2: [ // Night colors
+        '#6666FF', // Blue
+        '#3333FF', // Deep Blue
+        '#0000FF', // Pure Blue
+        '#0000CC', // Dark Blue
+        '#000099', // Navy
+        '#4D4DFF', // Light Blue
+        '#1A1AFF', // Medium Blue
+        '#0000B3'  // Royal Blue
+    ],
+    map3: [ // Morning colors
+        '#99FF99', // Light Green
+        '#66FF66', // Bright Green
+        '#33FF33', // Lime Green
+        '#00FF00', // Pure Green
+        '#00CC00', // Dark Green
+        '#009900', // Forest Green
+        '#66CC66', // Sage Green
+        '#339933'  // Medium Green
+    ]
+};
+
+function getCharacterColors() {
+    const selectedMap = getSelectedMap();
+    return mapColorSchemes[selectedMap] || mapColorSchemes.map1;
+}
 
 let characters = [];
 const numCharacters = 8;
@@ -40,7 +76,7 @@ function initMultiplayerGame() {
     characters = [];
     window.characters = characters;
     
-    let availableColors = [...characterColors];
+    let availableColors = [...getCharacterColors()];
     shuffleArray(availableColors);
     
     const player2Color = availableColors.pop();
@@ -333,3 +369,15 @@ function moveCharacterRandomly(characterObj) {
         }
     }
 }
+
+window.addEventListener('mapchange', () => {
+    if (gameStarted) {
+        const newColors = getCharacterColors();
+        characters.forEach((char, index) => {
+            if (char.element) {
+                char.element.style.backgroundColor = newColors[index % newColors.length];
+                char.color = newColors[index % newColors.length];
+            }
+        });
+    }
+});
