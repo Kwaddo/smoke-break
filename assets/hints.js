@@ -53,7 +53,7 @@ function createHint() {
     hint.style.backgroundSize = "contain";
     hint.style.backgroundRepeat = "no-repeat";
     hint.style.backgroundPosition = "center";
-    hint.style.boxShadow = "0 0 10px rgb(255, 255, 255)";
+    hint.style.textShadow = "0 0 10px rgb(255, 255, 255)";
     hint.style.zIndex = "999";
     hint.style.animation = "pulse 1s infinite";
     let hintX, hintY;
