@@ -17,13 +17,14 @@ html {
     position: absolute;
     z-index: 9999;
     font-size: 8rem;
+    margin-bottom: 35rem;
     word-spacing: 50rem;
     font-weight: bold;
-    align-self: flex-start;
     letter-spacing: 10px;
     color: rgba(203, 201, 201, 0.522);
     text-shadow: 5px 15px 15px black;
     cursor: default;
+    white-space: nowrap;
 }
 
 .spacing {
