@@ -6,27 +6,46 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Multiplayer Mode</title>
     <link rel="stylesheet" href="./assets/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Honk&family=Sixtyfour&family=Jersey+10&display=swap" rel="stylesheet">
 </head>
 
 <body>
+    <p class="title-text">SMOKE BREAK</p>
     <div class="spacing">
-        <h1>Controls</h1>
-        <div>Student: Arrow Keys</div>
-        <div>Ahmed: WASD</div>
-        <div>Press SPACE to start</div>
-        <div class="mode-selection">
-            <h1>Select Game Mode</h1>
-            <div class="mode-option">
-                <button class="mode-button single" onclick="switchMapMulti(1)">Afternoon</button>
-                <button class="mode-button single" onclick="switchMapMulti(2)">Night</button>
-                <button class="mode-button single" onclick="switchMapMulti(3)">Morning</button>
+        <div class="instructions">
+            <h1>How To Play</h1>
+            <p>• Player 2 must hide - WASD</p>
+            <p>• Find Player 2 to win - Arrow Keys</p>
+        </div>
+        <div class="spacing2">
+            <h1>Controls</h1>
+            <div class="arrows">
+                <div class="arrow up" title="Arrow Up"></div>
+                <div class="row">
+                    <div class="arrow left" title="Arrow Left"></div>
+                    <div class="arrow down" title="Arrow Down"></div>
+                    <div class="arrow right" title="Arrow Right"></div>
+                </div>
             </div>
         </div>
     </div>
     
     <div id="game-menu">
         <br><br><br>
-        <button id="start-game">Start Game</button>
+        <div class="menu">
+            <button id="start-game">Start Game</button>
+        </div>
+    </div>
+    <div class="mode-selection">
+        <h1>Select Game Map</h1>
+        <div class="mode-option">
+            <button class="mode-button single" onclick="switchMapMulti(3)" title="Morning"><i class="fa-solid fa-sun"></i></button>
+            <button class="mode-button single" onclick="switchMapMulti(1)" title="Afternoon"><i class="fa-solid fa-cloud-sun"></i></button>
+            <button class="mode-button single" onclick="switchMapMulti(2)" title="Evening"><i class="fa-solid fa-moon"></i></button>
+        </div>
     </div>
     <div id="tilemap-container"></div>
     <div class="map"></div>
