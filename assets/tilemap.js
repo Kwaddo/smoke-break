@@ -163,7 +163,6 @@ function switchMap(mapNumber) {
     }));
 }
 
-// Export necessary variables and functions
 window.switchMap = switchMap;
 window.currentMap = currentMap;
 
