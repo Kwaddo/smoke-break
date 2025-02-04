@@ -25,6 +25,11 @@ document.addEventListener("keydown", (e) => {
 });
 
 function resetGame(instant = false) {
+    if (pauseMenu) {
+        pauseMenu.remove();
+        pauseMenu = null;
+    }
+    isPaused = false;
     window.characters.forEach(character => {
         if (character.element) {
             character.element.remove();

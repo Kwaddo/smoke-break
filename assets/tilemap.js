@@ -149,7 +149,9 @@ function switchMap(mapNumber) {
     mapElement.style.backgroundImage = `url('./assets/images/${selectedMap}.png')`;
     tilemapContainer.innerHTML = '';
     createTilemap();
-    resetGame(true);
+    if (typeof resetGame === 'function') {
+        resetGame(false);
+    }
 }
 
 function switchMapMulti(mapNumber) {
