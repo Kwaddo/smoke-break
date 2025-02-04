@@ -10,6 +10,7 @@ let score = 0;
 let pressedKeys = new Set();
 let moveInterval = null;
 let currentDirection = null;
+let lives = 2;
 
 document.getElementById("start-game").addEventListener("click", () => {
     document.getElementById("game-menu").style.display = "none";
@@ -23,7 +24,7 @@ document.addEventListener("keydown", (e) => {
     }
 });
 
-function resetGame() {
+function resetGame(instant = false) {
     window.characters.forEach(character => {
         if (character.element) {
             character.element.remove();
@@ -39,7 +40,12 @@ function resetGame() {
         countdownDisplay = null;
     }
     clearInterval(countdownInterval);
-    document.getElementById("game-menu").style.display = "flex";
+    
+    if (instant) {
+        initGame();
+    } else {
+        document.getElementById("game-menu").style.display = "flex";
+    }
 }
 
 function createCountdownTimer() {
@@ -198,7 +204,7 @@ function showLosePopup() {
         setTimeout(() => {
             document.body.removeChild(popup);
             document.getElementById("start-game").innerText = "Try Again?";
-            resetGame();
+            resetGame(false);
         }, 300);
     }, 2000);
 }
@@ -292,8 +298,7 @@ function movePlayer(e) {
         }
         for (const character of window.characters) {
             if (newX === character.position.x && newY === character.position.y) {
-                showLosePopup();
-                removePlayer();
+                loseLife();
                 return;
             }
         }
@@ -322,7 +327,7 @@ function createPauseMenu() {
 
     document.getElementById("resetButton").addEventListener("click", () => {
         hidePauseMenu();
-        resetGame();
+        resetGame(true);
     });
 }
 
@@ -420,6 +425,7 @@ function initGame() {
     document.getElementById("game-menu").style.display = "none";
     gameStarted = true;
     isPaused = false;
+    lives = 2;
     initPlayer();
     window.initCharacter();
     createCountdownTimer();
@@ -427,4 +433,15 @@ function initGame() {
     window.startHintSystem();
     lastMoveTime = performance.now();
     requestAnimationFrame(gameLoop);
+}
+
+function loseLife() {
+    lives--;
+    const player = document.getElementById("player");
+    if (lives > 0) {
+        player.style.backgroundColor = "red";
+    } else {
+        showLosePopup();
+        removePlayer();
+    }
 }

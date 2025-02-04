@@ -1,6 +1,5 @@
 let activeHints = [];
 const spawnInterval = 5000; 
-const chance = 0.1;
 let hintScore = 0;
 
 const uselessHints = [
@@ -13,14 +12,15 @@ const uselessHints = [
 ];
 
 const colorNames = {
-    '#87CEEB': 'Blue',
-    '#000080': 'Blue',
-    '#32CD32': 'Green',
-    '#228B22': 'Green',
-    '#DC143C': 'Red',
-    '#800000': 'Red',
-    '#DAA520': 'Golden',
-    '#B8860B': 'Golden'
+    '#FF9999': 'Red',   // Light Red
+    '#FF6666': 'Red',  // Medium Red
+    '#CC3333': 'Red',    // Dark Red
+    '#99CCFF': 'Blue',  // Light Blue
+    '#6699FF': 'Blue', // Medium Blue
+    '#3366CC': 'Blue',   // Dark Blue
+    '#99FF99': 'Green', // Light Green
+    '#66CC66': 'Green',// Medium Green
+    '#339933': 'reen'   // Dark Green
 };
 
 const hintTypes = {

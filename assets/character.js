@@ -1,16 +1,18 @@
 let characters = [];
-const numCharacters = 8;
+const numCharacters = 9;
 let winningCharacter = null;
+window.moveInterval = Math.floor(Math.random() * (750 - 250 + 1) + 800);
 
 const characterColors = [
-    '#87CEEB', // Sky Blue
-    '#000080', // Navy Blue
-    '#32CD32', // Lime Green
-    '#228B22', // Forest Green
-    '#DC143C', // Crimson Red
-    '#800000', // Maroon
-    '#DAA520', // Goldenrod
-    '#B8860B'  // Dark Goldenrod
+    '#FF9999', // Light Red
+    '#FF6666', // Medium Red
+    '#CC3333', // Dark Red
+    '#99CCFF', // Light Blue
+    '#6699FF', // Medium Blue
+    '#3366CC', // Dark Blue
+    '#99FF99', // Light Green
+    '#66CC66', // Medium Green
+    '#339933', // Dark Green
 ];
 
 function isOccupiedByCharacter(x, y, excludeChar = null) {
@@ -32,7 +34,7 @@ function createCharacter(startX, startY) {
         element: character,
         position: { x: startX, y: startY },
         isWinningCharacter: false,
-        moveInterval: Math.floor(Math.random() * (750 - 250 + 1) + 800),
+        moveInterval: window.moveInterval,
         lastMoveTime: 0,
         color: color
     };
