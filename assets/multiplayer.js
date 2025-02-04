@@ -9,6 +9,8 @@ let isPaused = false;
 let gameTimer = 60;
 let startTime = null;
 let timerElement = null;
+let pauseStartTime = null;
+let totalPausedTime = 0;
 
 function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
@@ -147,7 +149,8 @@ function moveWinningCharacter(e) {
 function gameLoop(timestamp) {
     if (!isPaused && gameStarted) {
         const currentTime = Date.now();
-        const elapsedSeconds = Math.floor((currentTime - startTime) / 1000);
+        const adjustedTime = currentTime - totalPausedTime;
+        const elapsedSeconds = Math.floor((adjustedTime - startTime) / 1000);
         const remainingTime = Math.max(0, gameTimer - elapsedSeconds);
         
         timerElement.textContent = `Time: ${remainingTime}s`;
@@ -181,6 +184,12 @@ window.addEventListener("keydown", (e) => {
         movePlayer1(e);
     } else if (e.key === "Escape") {
         isPaused = !isPaused;
+        if (isPaused) {
+            pauseStartTime = Date.now();
+        } else {
+            totalPausedTime += Date.now() - pauseStartTime;
+            pauseStartTime = null;
+        }
     } else if (e.key === " " && !gameStarted) {
         initMultiplayerGame();
     }
@@ -288,6 +297,8 @@ function resetGame() {
         timerElement = null;
     }
     startTime = null;
+    pauseStartTime = null;
+    totalPausedTime = 0;
     characters.forEach(character => {
         if (character.element) {
             character.element.remove();

@@ -38,7 +38,7 @@ func main() {
 	http.HandleFunc("/scores", serveScores)
 	http.HandleFunc("/submit-score", submitScore)
 
-	port := ":8080"
+	port := ":6776"
 	log.Printf("Starting server on %s...", port)
 	err = http.ListenAndServe(port, nil)
 	if err != nil {
