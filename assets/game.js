@@ -1,8 +1,8 @@
-let lastMoveTime = 0
-let isMoving = false
-let isPaused = false
-let gameStarted = false
-let pauseMenu
+let lastMoveTime = 0;
+let isMoving = false;
+let isPaused = false;
+let gameStarted = false;
+let pauseMenu, nameMenu = false;
 window.countdownTime = 180;
 let countdownInterval;
 let countdownDisplay;
@@ -124,11 +124,13 @@ function showWinPopup() {
 }
 
 function promptForName(finalScore) {
+    isPaused = true;
+    nameMenu = true;
     const namePrompt = document.createElement("div");
     namePrompt.classList.add("name-prompt");
     namePrompt.innerHTML = `
         <h2>Enter your name:</h2>
-        <input type="text" id="player-name" placeholder="Your name">
+        <input type="text" id="player-name" placeholder="Your name" autocomplete="off">
         <button id="submit-name">Submit</button>
     `;
     document.body.appendChild(namePrompt);
@@ -341,7 +343,7 @@ function hidePauseMenu() {
 }
 
 function togglePause() {
-    if (!gameStarted) return;
+    if (!gameStarted || nameMenu) return;
     if (isPaused) {
         unpauseGame();
     } else {
@@ -417,6 +419,7 @@ window.addEventListener("keyup", (e) => {
 function initGame() {
     document.getElementById("game-menu").style.display = "none";
     gameStarted = true;
+    isPaused = false;
     initPlayer();
     window.initCharacter();
     createCountdownTimer();

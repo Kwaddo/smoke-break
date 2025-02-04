@@ -28,10 +28,12 @@ html {
 
 .spacing {
     cursor: default;
+    display: flex;
+    flex-direction: column;
     justify-content: center;
     position: absolute;
     margin-right: 73rem;
-    margin-bottom: 5rem;
+    letter-spacing: 1px;
 }
 
 h1 {
@@ -41,12 +43,11 @@ h1 {
 }
 
 .arrows {
-    position: absolute;
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-left: 4.5rem;
     z-index: 9999;
+    margin-right: 0.5rem;
     gap: 5px;
 }
 
@@ -142,14 +143,14 @@ h1 {
     justify-content: center;
     align-items: center;
     z-index: 1000;
+    letter-spacing: 2px;
 }
 
 .pause-content {
-    background-color: rgba(0, 0, 0, 0.9);
+    background-color: rgba(0, 0, 0, 0.7);
     padding: 2rem;
     border-radius: 10px;
     text-align: center;
-    border: 2px solid white;
 }
 
 .pause-content h2 {
@@ -298,6 +299,7 @@ h1 {
     background-color: rgba(0, 0, 0, 0.8);
     color: white;
     padding: 20px 40px;
+    letter-spacing: 1px;
     font-size: 24px;
     font-weight: bold;
     border-radius: 10px;
@@ -330,32 +332,57 @@ h1 {
     position: fixed;
     top: 50%;
     left: 50%;
+    letter-spacing: 2px;
     transform: translate(-50%, -50%);
     background-color: rgba(0, 0, 0, 0.8);
     color: white;
     padding: 20px 40px;
+    padding-bottom: 25px;
     border-radius: 10px;
     font-size: 20px;
     z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     text-align: center;
 }
 
-#countdown-timer{
+#countdown-timer {
     z-index: 9999;
     margin-bottom: 50.7rem;
 }
 
+.instructions {
+    margin-left: 4.3rem;
+    margin-top: 8rem;   
+}
+
+.instructions p {
+    font-size: 18px;
+}
+
+.instructions h1 {
+    width: 12rem;
+    letter-spacing: 2px;
+    text-align: center;
+}
+
 .name-prompt input {
     padding: 10px;
-    margin-top: 10px;
     font-size: 18px;
     border-radius: 5px;
     border: none;
     width: 100%;
     max-width: 200px;
+    margin-bottom: 10px;
+}
+
+.name-prompt input:focus{
+    outline: none;
 }
 
 .name-prompt button {
+    display: flex;
     padding: 10px 20px;
     font-size: 16px;
     cursor: pointer;
@@ -364,6 +391,7 @@ h1 {
     background-color: #28a745;
     color: white;
     border: none;
+    align-self: center;
 }
 
 .name-prompt button:hover {
@@ -372,7 +400,7 @@ h1 {
 
 #leaderboard-container {
     position: absolute;
-    margin-top: 5rem;
+    margin-top: 7rem;
     margin-left: 73rem;
     padding: 2rem;
     background-color: rgba(0, 0, 0, 0.833);

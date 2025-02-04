@@ -7,7 +7,7 @@ const uselessHints = [
     "The characters are many colors!",
     "Use arrow keys to move.",
     "Don't touch the other characters!",
-    "The walls are black.",
+    "Ahmed loves chess.",
     "Press ESC to pause.",
     "Time is running out!",
 ];
