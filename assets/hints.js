@@ -20,7 +20,7 @@ const colorNames = {
     '#3366CC': 'Blue',   // Dark Blue
     '#99FF99': 'Green', // Light Green
     '#66CC66': 'Green',// Medium Green
-    '#339933': 'reen'   // Dark Green
+    '#339933': 'Green'   // Dark Green
 };
 
 const hintTypes = {
@@ -129,6 +129,7 @@ function startHintSystem() {
 function clearHints() {
     activeHints.forEach(hint => hint.remove());
     activeHints = [];
+    hintScore = 0;
 }
 
 window.clearHints = clearHints;

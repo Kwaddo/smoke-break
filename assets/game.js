@@ -32,6 +32,7 @@ function resetGame(instant = false) {
     });
     window.characters = [];
     window.clearHints();
+    window.hintScore = 0;
     removePlayer();
     window.winningCharacter = null;
     gameStarted = false;
@@ -426,6 +427,7 @@ function initGame() {
     gameStarted = true;
     isPaused = false;
     lives = 2;
+    window.hintScore = 0;
     initPlayer();
     window.initCharacter();
     createCountdownTimer();
