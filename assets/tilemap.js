@@ -140,17 +140,21 @@ function isValidMove(x, y) {
 }
 
 function switchMap(mapNumber) {
+    if (typeof resetGame === 'function') {
+        resetGame(true);
+    }
     const newUrl = new URL(window.location);
     newUrl.searchParams.set('map', mapNumber);
     window.history.pushState({}, '', newUrl);
     const selectedMap = `map${mapNumber}`;
-    const currentMapLayout = mapLayouts[selectedMap];
     mapElement.style.backgroundImage = `url('./assets/images/${selectedMap}.png')`;
     tilemapContainer.innerHTML = '';
     createTilemap();
-    if (typeof resetGame === 'function') {
-        resetGame(true);
+    const gameMenu = document.getElementById("game-menu");
+    if (gameMenu) {
+        gameMenu.style.display = "flex";
     }
+    window.dispatchEvent(new CustomEvent('mapchange'));
 }
 
 window.switchMap = switchMap;

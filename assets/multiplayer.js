@@ -333,7 +333,7 @@ function showWinPopup(winner) {
     }, 2000);
 }
 
-function resetGame() {
+function resetGame(fromMapSwitch = false) {
     if (timerElement) {
         timerElement.remove();
         timerElement = null;
@@ -341,6 +341,8 @@ function resetGame() {
     startTime = null;
     pauseStartTime = null;
     totalPausedTime = 0;
+    gameStarted = false;
+    isPaused = false;
     characters.forEach(character => {
         if (character.element) {
             character.element.remove();
@@ -350,7 +352,12 @@ function resetGame() {
     if (player1) player1.remove();
     player1 = null;
     winningCharacter = null;
-    gameStarted = false;
+    if (!fromMapSwitch) {
+        const gameMenu = document.getElementById("game-menu");
+        if (gameMenu) {
+            gameMenu.style.display = "flex";
+        }
+    }
 }
 
 function moveCharacterRandomly(characterObj) {
