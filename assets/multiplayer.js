@@ -37,7 +37,7 @@ function getCharacterColors() {
 }
 
 let characters = [];
-const numCharacters = 8;
+const numCharacters = 7;
 let winningCharacter = null;
 let player1 = null;
 let gameStarted = false;
@@ -169,15 +169,21 @@ function moveWinningCharacter(e) {
     }
 
     if (window.isValidMove(newX, newY)) {
-        winningCharacter.position.x = newX;
-        winningCharacter.position.y = newY;
-        updateCharacterPosition(winningCharacter);
-
-        if (player1 && 
-            newX === parseInt(player1.dataset.x) && 
-            newY === parseInt(player1.dataset.y)) {
-            showWinPopup("Ahmed Wins!");
-            resetGame();
+        const collidingChar = characters.find(char => 
+            !char.isWinningCharacter && 
+            char.position.x === newX && 
+            char.position.y === newY
+        );
+        if (!collidingChar) {
+            winningCharacter.position.x = newX;
+            winningCharacter.position.y = newY;
+            updateCharacterPosition(winningCharacter);
+            if (player1 && 
+                newX === parseInt(player1.dataset.x) && 
+                newY === parseInt(player1.dataset.y)) {
+                showWinPopup("Ahmed Wins!");
+                resetGame();
+            }
         }
     }
 }
