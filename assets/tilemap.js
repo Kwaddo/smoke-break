@@ -147,6 +147,18 @@ function switchMap(mapNumber) {
     window.history.pushState({}, '', newUrl);
     const selectedMap = `map${mapNumber}`;
     mapElement.style.backgroundImage = `url('./assets/images/${selectedMap}.png')`;
+    tilemapContainer.innerHTML = '';
+    createTilemap();
+    resetGame(true);
+}
+
+function switchMapMulti(mapNumber) {
+    currentMap = mapNumber;
+    const newUrl = new URL(window.location);
+    newUrl.searchParams.set('map', mapNumber);
+    window.history.pushState({}, '', newUrl);
+    const selectedMap = `map${mapNumber}`;
+    mapElement.style.backgroundImage = `url('./assets/images/${selectedMap}.png')`;
     if (gameStarted) {
         if (typeof resetGame === 'function') {
             resetGame(true);
@@ -164,6 +176,7 @@ function switchMap(mapNumber) {
 }
 
 window.switchMap = switchMap;
+window.switchMapMulti = switchMapMulti;
 window.currentMap = currentMap;
 
 createTilemap();
