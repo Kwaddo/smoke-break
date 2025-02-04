@@ -142,18 +142,31 @@ function promptForName(finalScore) {
     namePrompt.classList.add("name-prompt");
     namePrompt.innerHTML = `
         <h2>Enter your name:</h2>
-        <input type="text" id="player-name" placeholder="Your name" autocomplete="off">
+        <input type="text" id="player-name" placeholder="Your name" maxlength="10" autocomplete="off">
         <button id="submit-name">Submit</button>
     `;
     document.body.appendChild(namePrompt);
 
     const submitButton = document.getElementById("submit-name");
+    const inputField = document.getElementById("player-name");
+    inputField.addEventListener("input", (e) => {
+        e.target.value = e.target.value.slice(0, 10);
+    });
+
     submitButton.addEventListener("click", () => {
         const playerName = document.getElementById("player-name").value.trim();
         if (playerName) {
+            const now = new Date();
+            const time = now.toLocaleTimeString('en-US', { 
+                hour: '2-digit', 
+                minute: '2-digit',
+                hour12: false 
+            });
+            
             const scoreData = {
                 name: playerName,
                 score: finalScore,
+                timestamp: time
             };
 
             fetch("/submit-score", {

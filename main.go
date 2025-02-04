@@ -16,8 +16,9 @@ import (
 var client *firestore.Client
 
 type Score struct {
-	Name  string `json:"name"`
-	Score int64  `json:"score"`
+	Name      string `json:"name"`
+	Score     int64  `json:"score"`
+	Timestamp string `json:"timestamp"`
 }
 
 func main() {
@@ -96,6 +97,7 @@ func serveScores(w http.ResponseWriter, r *http.Request) {
     var leaderboard []struct {
         Name  string `json:"name"`
         Score int    `json:"score"`
+        Timestamp string `json:"timestamp"`
     }
 
     for {
@@ -111,6 +113,7 @@ func serveScores(w http.ResponseWriter, r *http.Request) {
         var scoreData struct {
             Name  string `json:"name"`
             Score int    `json:"score"`
+            Timestamp string `json:"timestamp"`
         }
         if err := doc.DataTo(&scoreData); err != nil {
             http.Error(w, fmt.Sprintf("Error decoding document data: %v", err), http.StatusInternalServerError)
@@ -123,6 +126,7 @@ func serveScores(w http.ResponseWriter, r *http.Request) {
         Scores []struct {
             Name  string `json:"name"`
             Score int    `json:"score"`
+            Timestamp string `json:"timestamp"`
         } `json:"scores"`
         TotalScores int `json:"totalScores"`
     }{
@@ -141,9 +145,14 @@ func submitScore(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, fmt.Sprintf("Error decoding JSON: %v", err), http.StatusBadRequest)
 		return
 	}
+    if len(score.Name) > 10 {
+        http.Error(w, "Name cannot exceed 10 characters", http.StatusBadRequest)
+        return
+    }
 	_, err := client.Collection("scores").Doc(score.Name).Set(context.Background(), map[string]interface{}{
 		"name":  score.Name,  
 		"score": score.Score, 
+		"timestamp": score.Timestamp,
 	})
 	if err != nil {
 		http.Error(w, fmt.Sprintf("Error saving score: %v", err), http.StatusInternalServerError)

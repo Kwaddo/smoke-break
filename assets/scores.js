@@ -5,6 +5,7 @@ async function fetchScores(page = 1) {
     try {
         const response = await fetch(`/scores?page=${page}`);
         const data = await response.json();
+        console.log("Received scores data:", data);
         displayLeaderboard(data.scores, page, data.totalScores);
     } catch (error) {
         console.error("Error fetching scores:", error);
@@ -18,7 +19,8 @@ function displayLeaderboard(scores, page, totalScores) {
     scores.forEach(score => {
         const scoreElement = document.createElement("div");
         scoreElement.classList.add("leaderboard-item");
-        scoreElement.innerText = `${score.name}: ${score.score}`;
+        scoreElement.innerText = `${score.name}: ${score.score} (${score.timestamp})`;
+        console.log(score.timestamp)
         leaderboard.appendChild(scoreElement);
     });
 
