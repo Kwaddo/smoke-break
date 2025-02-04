@@ -4,6 +4,7 @@ const tileSize = 30;
 const columns = 25;
 const rows = 25;
 let tiles = [];
+let currentMap = 1;
 
 const mapLayouts = {
     map1: [
@@ -140,24 +141,31 @@ function isValidMove(x, y) {
 }
 
 function switchMap(mapNumber) {
-    if (typeof resetGame === 'function') {
-        resetGame(true);
-    }
+    currentMap = mapNumber;
     const newUrl = new URL(window.location);
     newUrl.searchParams.set('map', mapNumber);
     window.history.pushState({}, '', newUrl);
     const selectedMap = `map${mapNumber}`;
     mapElement.style.backgroundImage = `url('./assets/images/${selectedMap}.png')`;
+    if (gameStarted) {
+        if (typeof resetGame === 'function') {
+            resetGame(true);
+        }
+    }
     tilemapContainer.innerHTML = '';
     createTilemap();
     const gameMenu = document.getElementById("game-menu");
-    if (gameMenu) {
+    if (gameMenu && !gameStarted) {
         gameMenu.style.display = "flex";
     }
-    window.dispatchEvent(new CustomEvent('mapchange'));
+    window.dispatchEvent(new CustomEvent('mapchange', { 
+        detail: { mapNumber: currentMap }
+    }));
 }
 
+// Export necessary variables and functions
 window.switchMap = switchMap;
+window.currentMap = currentMap;
 
 createTilemap();
 
