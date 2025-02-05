@@ -51,9 +51,27 @@ A web-based maze game where players need to find Ahmed during his smoke break. T
 
 ### Maps
 
+## Legend
+
+█ - Wall
+░ - Path
+P - Player Start
+H - Hint Location
+A - Ahmed's Location
+
+## Tilemaps
+
 - Morning map: Green theme
+
+![alt text](./assets/images/map3.png)
+
 - Afternoon map: Orange theme
+
+![alt text](./assets/images/map1.png)
+
 - Evening map: Blue theme
+
+![alt text](./assets/images/map2.png)
 
 ### Characters
 
