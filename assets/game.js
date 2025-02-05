@@ -45,6 +45,10 @@ function resetGame(instant = false) {
         countdownDisplay.remove();
         countdownDisplay = null;
     }
+    const scoreDisplay = document.getElementById("score-display");
+    if (scoreDisplay) {
+        scoreDisplay.remove();
+    }
     clearInterval(countdownInterval);
     
     if (instant) {
@@ -70,10 +74,39 @@ function updateCountdown() {
     const minutes = Math.floor(window.countdownTime / 60);
     const seconds = window.countdownTime % 60;
     countdownDisplay.innerText = `Time Left: ${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
+    updateScoreDisplay();
 
     if (window.countdownTime <= 0) {
         clearInterval(countdownInterval);
         showLosePopup();
+    }
+}
+
+
+function createScoreDisplay() {
+    const scoreDisplay = document.createElement("div");
+    scoreDisplay.id = "score-display";
+    scoreDisplay.style.position = "absolute";
+    scoreDisplay.style.bottom = "20px";
+    scoreDisplay.style.left = "50%";
+    scoreDisplay.style.transform = "translateX(-50%)";
+    scoreDisplay.style.fontSize = "24px";
+    scoreDisplay.style.color = "white";
+    scoreDisplay.style.backgroundColor = "rgba(0, 0, 0, 0.7)";
+    scoreDisplay.style.padding = "10px";
+    scoreDisplay.style.borderRadius = "5px";
+    document.body.appendChild(scoreDisplay);
+    updateScoreDisplay();
+}
+
+function updateScoreDisplay() {
+    const scoreDisplay = document.getElementById("score-display");
+    if (scoreDisplay && !isPaused) {
+        const timeScore = window.countdownTime;
+        const hintScore = window.hintScore;
+        const totalScore = timeScore + hintScore;
+        scoreDisplay.innerText = `Score: ${totalScore} (Time: ${timeScore} + Hints: ${hintScore})`;
+        scoreDisplay.style.opacity = 1;
     }
 }
 
@@ -450,6 +483,7 @@ function initGame() {
     initPlayer();
     window.initCharacter();
     createCountdownTimer();
+    createScoreDisplay();
     startCountdown();
     window.startHintSystem();
     lastMoveTime = performance.now();

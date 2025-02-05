@@ -99,7 +99,7 @@ function checkHintCollision(playerX, playerY) {
         if (playerX === hintX && playerY === hintY) {
             const popup = document.createElement("div");
             popup.classList.add("popup");
-            if (hintScore === 10) {
+            if (hintScore === 20) {
                 popup.innerText = hint.dataset.message + "\n\nYou're getting close to finding Ahmed!";
             } else {
                 popup.innerText = hint.dataset.message;
@@ -108,7 +108,7 @@ function checkHintCollision(playerX, playerY) {
             popup.style.opacity = 1;
             hint.remove();
             activeHints.splice(index, 1);
-            hintScore += 5;
+            updateHintScore(10);
             window.updateCountdown();
             setTimeout(() => {
                 popup.style.opacity = 0;
@@ -116,6 +116,12 @@ function checkHintCollision(playerX, playerY) {
             }, 2000);
         }
     });
+}
+
+function updateHintScore(points) {
+    hintScore += points;
+    window.hintScore = hintScore;
+    window.updateScoreDisplay();
 }
 
 function startHintSystem() {
@@ -130,6 +136,8 @@ function clearHints() {
     activeHints.forEach(hint => hint.remove());
     activeHints = [];
     hintScore = 0;
+    window.hintScore = 0;
+    window.updateScoreDisplay();
 }
 
 window.clearHints = clearHints;
