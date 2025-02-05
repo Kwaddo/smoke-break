@@ -47,6 +47,7 @@ let startTime = null;
 let timerElement = null;
 let pauseStartTime = null;
 let totalPausedTime = 0;
+let pauseMenu = null;
 
 function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
@@ -60,8 +61,14 @@ function createTimer() {
     timerElement = document.createElement('div');
     timerElement.classList.add('timer');
     timerElement.style.position = 'fixed';
-    timerElement.style.top = '20px';
-    timerElement.style.right = '20px';
+    timerElement.style.top = '50px';
+    timerElement.style.left = '50%';
+    timerElement.style.transform = 'translateX(-50%)';
+    timerElement.style.zIndex = '1000';
+    timerElement.style.backgroundColor = 'rgba(0, 0, 0, 0.5=7)';
+    timerElement.style.padding = '10px 20px';
+    timerElement.style.borderRadius = '5px';
+    timerElement.style.fontFamily = 'Sixtyfour, sans-serif';
     timerElement.style.fontSize = '24px';
     timerElement.style.color = 'white';
     document.body.appendChild(timerElement);
@@ -223,13 +230,7 @@ window.addEventListener("keydown", (e) => {
     } else if (["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"].includes(e.key)) {
         movePlayer1(e);
     } else if (e.key === "Escape") {
-        isPaused = !isPaused;
-        if (isPaused) {
-            pauseStartTime = Date.now();
-        } else {
-            totalPausedTime += Date.now() - pauseStartTime;
-            pauseStartTime = null;
-        }
+        togglePause();
     } else if (e.key === " " && !gameStarted) {
         initMultiplayerGame();
     }
@@ -336,6 +337,10 @@ function endGame() {
         timerElement.remove();
         timerElement = null;
     }
+    if (pauseMenu) {
+        pauseMenu.remove();
+        pauseMenu = null;
+    }
     startTime = null;
     pauseStartTime = null;
     totalPausedTime = 0;
@@ -396,3 +401,62 @@ window.addEventListener('mapchange', () => {
         });
     }
 });
+
+function createPauseMenu() {
+    pauseMenu = document.createElement("div");
+    pauseMenu.classList.add("pause-menu");
+    
+    const content = document.createElement("div");
+    content.classList.add("pause-content");
+    
+    content.innerHTML = `
+        <h2>Game Paused</h2>
+        <button id="resumeButton">Continue</button>
+    `;
+    
+    pauseMenu.appendChild(content);
+    document.body.appendChild(pauseMenu);
+
+    document.getElementById("resumeButton").addEventListener("click", () => {
+        unpauseGame();
+    });
+}
+
+function showPauseMenu() {
+    if (!gameStarted) return;
+    if (!pauseMenu) {
+        createPauseMenu();
+    }
+    pauseMenu.style.display = "flex";
+    isPaused = true;
+}
+
+function hidePauseMenu() {
+    if (pauseMenu) {
+        pauseMenu.style.display = "none";
+    }
+    isPaused = false;
+}
+
+function togglePause() {
+    if (!gameStarted) return;
+    if (isPaused) {
+        unpauseGame();
+    } else {
+        pauseGame();
+    }
+}
+
+function pauseGame() {
+    if (!gameStarted) return;
+    showPauseMenu();
+    pauseStartTime = Date.now();
+}
+
+function unpauseGame() {
+    hidePauseMenu();
+    if (pauseStartTime) {
+        totalPausedTime += Date.now() - pauseStartTime;
+        pauseStartTime = null;
+    }
+}
