@@ -182,7 +182,6 @@ function moveWinningCharacter(e) {
                 newX === parseInt(player1.dataset.x) && 
                 newY === parseInt(player1.dataset.y)) {
                 showWinPopup("Ahmed Wins!");
-                resetGame();
             }
         }
     }
@@ -199,7 +198,6 @@ function gameLoop(timestamp) {
         
         if (remainingTime === 0) {
             showWinPopup("Time's Up - Ahmed Wins!");
-            resetGame();
             return;
         }
 
@@ -293,7 +291,6 @@ function movePlayer1(e) {
                 newX === character.position.x && 
                 newY === character.position.y) {
                 showWinPopup("Ahmed Wins!");
-                resetGame();
                 return;
             }
         }
@@ -302,7 +299,6 @@ function movePlayer1(e) {
             newX === winningCharacter.position.x &&
             newY === winningCharacter.position.y) {
             showWinPopup("Student Wins!");
-            resetGame();
         }
 
         setTimeout(() => {
@@ -312,28 +308,30 @@ function movePlayer1(e) {
 }
 
 function showWinPopup(winner) {
+    characters.forEach(character => {
+        if (character.element) {
+            character.element.remove();
+        }
+    });
+    if (player1) player1.remove();
     const popup = document.createElement("div");
     popup.classList.add("popup");
     popup.innerText = `${winner}`;
+    popup.style.opacity = 0;
     document.body.appendChild(popup);
-    
-    setTimeout(() => {
+    requestAnimationFrame(() => {
         popup.style.opacity = 1;
-    }, 100);
-    
+    });
     setTimeout(() => {
         popup.style.opacity = 0;
         setTimeout(() => {
             document.body.removeChild(popup);
             resetGame();
-            setTimeout(() => {
-                document.getElementById("game-menu").style.display = "flex";
-            }, 500);
-        }, 300);
-    }, 2000);
+        }, 500);
+    },1500);
 }
 
-function resetGame(fromMapSwitch = false) {
+function endGame() {
     if (timerElement) {
         timerElement.remove();
         timerElement = null;
@@ -352,6 +350,10 @@ function resetGame(fromMapSwitch = false) {
     if (player1) player1.remove();
     player1 = null;
     winningCharacter = null;
+}
+
+function resetGame(fromMapSwitch = false) {
+    endGame();
     if (!fromMapSwitch) {
         const gameMenu = document.getElementById("game-menu");
         if (gameMenu) {

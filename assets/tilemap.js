@@ -155,22 +155,26 @@ function switchMap(mapNumber) {
 }
 
 function switchMapMulti(mapNumber) {
+    if (typeof endGame === 'function') {
+        endGame();
+    }
     currentMap = mapNumber;
     const newUrl = new URL(window.location);
     newUrl.searchParams.set('map', mapNumber);
     window.history.pushState({}, '', newUrl);
     const selectedMap = `map${mapNumber}`;
     mapElement.style.backgroundImage = `url('./assets/images/${selectedMap}.png')`;
-    if (gameStarted) {
-        if (typeof resetGame === 'function') {
-            resetGame(true);
-        }
-    }
     tilemapContainer.innerHTML = '';
     createTilemap();
     const gameMenu = document.getElementById("game-menu");
     if (gameMenu && !gameStarted) {
         gameMenu.style.display = "flex";
+    }
+    if (gameStarted) {
+        if (typeof resetGame === 'function') {
+            resetGame(true);
+            initMultiplayerGame();
+        }
     }
     window.dispatchEvent(new CustomEvent('mapchange', { 
         detail: { mapNumber: currentMap }
