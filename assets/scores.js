@@ -19,12 +19,13 @@ async function fetchScores(page = 1) {
 function displayLeaderboard(scores, page, totalScores) {
     const leaderboard = document.getElementById("leaderboard");
     leaderboard.innerHTML = '';
+    const startRank = (page - 1) * scoresPerPage;
 
-    scores.forEach(score => {
+    scores.forEach((score, index) => {
         const scoreElement = document.createElement("div");
         scoreElement.classList.add("leaderboard-item");
-        scoreElement.innerText = `${score.name}: ${score.score} (${score.timestamp})`;
-        console.log(score.timestamp)
+        const rank = startRank + index + 1;
+        scoreElement.innerText = `${rank}) ${score.name}: ${score.score} (${score.timestamp})`;
         leaderboard.appendChild(scoreElement);
     });
 
