@@ -185,11 +185,6 @@ function moveWinningCharacter(e) {
             winningCharacter.position.x = newX;
             winningCharacter.position.y = newY;
             updateCharacterPosition(winningCharacter);
-            if (player1 && 
-                newX === parseInt(player1.dataset.x) && 
-                newY === parseInt(player1.dataset.y)) {
-                showWinPopup("Ahmed Wins!");
-            }
         }
     }
 }
