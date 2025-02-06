@@ -113,27 +113,30 @@ h1 {
 
 #start-game{
     font-family: "Sixtyfour", serif;
-    margin-bottom: 3rem;
+    margin-bottom: 1.8rem;
     text-shadow: 0 0 10px rgba(0, 255, 0, 0.8), 0 0 20px rgba(0, 255, 0, 0.6);
     background-color: rgb(35, 85, 35);
-    animation: bounce 2s ease-in-out infinite;
+    box-shadow: 5px 10px 15px black;
 }
 
-@keyframes bounce {
-    0% {
-        transform: translateY(0);
-    }
-    50% {
-        transform: translateY(-10px);
-    }
-    100% {
-        transform: translateY(0);
-    }
+.menuSpacing{
+    display: flex;
+    flex-direction: column;   
 }
 
-#game-menu button:hover {
-    animation-play-state: paused;
-    background-color: rgb(25, 101, 25);
+#return-game {
+    font-family: "Sixtyfour", serif;
+    margin-bottom: 3rem;
+    text-shadow: 0 0 10px rgba(255, 0, 0, 0.8), 0 0 20px rgba(255, 0, 0, 0.6);
+    background-color: rgb(85, 10, 10);
+    box-shadow: 5px 10px 15px black;
+}
+
+#game-menu #start-game:hover {
+    background-color: rgb(39, 154, 39);;
+}
+#game-menu #return-game:hover {
+    background-color: rgb(130, 10, 10);
 }
 
 .pause-menu {
