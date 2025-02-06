@@ -93,6 +93,7 @@ const mapLayouts = {
 function getSelectedMap() {
     const urlParams = new URLSearchParams(window.location.search);
     const mapNumber = urlParams.get('map') || '1';
+    if (mapNumber < 1 || mapNumber > 3 || isNaN(mapNumber)) return `map${1}`
     return `map${mapNumber}`;
 }
 
