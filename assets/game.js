@@ -2,7 +2,7 @@ let lastMoveTime = 0;
 let isMoving = false;
 let isPaused = false;
 let gameStarted = false;
-let pauseMenu, nameMenu = false;
+let pauseMenu, nameMenu = false, namePrompt;
 window.countdownTime = 180;
 let countdownInterval;
 let countdownDisplay;
@@ -25,6 +25,11 @@ document.addEventListener("keydown", (e) => {
 });
 
 function resetGame(instant = false) {
+    document.querySelectorAll('.mode-button').forEach(button => {
+        button.style.pointerEvents = "all";
+        button.style.opacity = "1";
+        button.style.cursor = "pointer";
+    });
     if (pauseMenu) {
         pauseMenu.remove();
         pauseMenu = null;
@@ -171,19 +176,33 @@ function showWinPopup() {
 function promptForName(finalScore) {
     isPaused = true;
     nameMenu = true;
-    const namePrompt = document.createElement("div");
+    namePrompt = document.createElement("div");
     namePrompt.classList.add("name-prompt");
+    document.querySelectorAll('.mode-button').forEach(button => {
+        button.style.pointerEvents = "none";
+        button.style.opacity = "0.5";
+        button.style.cursor = "not-allowed";
+    });
     namePrompt.innerHTML = `
         <h2>Enter your name:</h2>
         <input type="text" id="player-name" placeholder="Your name" maxlength="10" autocomplete="off">
-        <button id="submit-name">Submit</button>
+          <div class="buttonSpaces">
+            <button id="submit-name">Submit</button>
+            <p class="OR">OR</p>
+            <button id="return-menu">Return to Start Menu</button>
+        </div>
     `;
     document.body.appendChild(namePrompt);
-
+    const returnMenu = document.getElementById('return-menu');
     const submitButton = document.getElementById("submit-name");
     const inputField = document.getElementById("player-name");
     inputField.addEventListener("input", (e) => {
         e.target.value = e.target.value.slice(0, 10);
+    });
+
+    returnMenu.addEventListener("click", () => {
+        hideNameMenu(true);
+        resetGame();    
     });
 
     submitButton.addEventListener("click", () => {
@@ -228,6 +247,12 @@ function promptForName(finalScore) {
     });
 }
 
+function hideNameMenu() {
+    if (namePrompt) {
+        namePrompt.style.display = "none"
+    }
+    isPaused = false
+}
 
 function updateLeaderboard(name, score) {
     const leaderboard = document.getElementById("leaderboard");
