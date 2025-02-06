@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Minesweeper</title>
+  <style>
+    .minesweeperContainer {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      position: relative;
+      height: 100vh;
+      background: #222;
+    }
+    
+    .board {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      background: #29353C;
+      padding: 10px;
+      border-radius: 4px;
+    }
+    
+    .row {
+      display: flex;
+      gap: 2px;
+    }
+    
+    .cell {
+      width: 28px;
+      height: 28px;
+      border: none;
+      background: #4D6269;
+      cursor: pointer;
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background-color 0.2s;
+      padding: 0;
+    }
+    
+    .cell:hover {
+      background: #1F2B30;
+    }
+    
+    .revealed {
+      background: #141B1F;
+      color: white;
+    }
+    
+    .mine {
+      background: #ff4444 !important;
+    }
+    
+    .popup {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.7);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 4px;
+    }
+    
+    .popupContent {
+      background: #29353C;
+      padding: 20px;
+      border-radius: 8px;
+      text-align: center;
+      color: white;
+    }
+    
+    .popupContent button {
+      background: #1F2B30;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 4px;
+      color: white;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    
+    .popupContent button:hover {
+      background: #141B1F;
+    }
+    
+    @media screen and (max-width: 768px) {
+      .cell {
+        font-size: 12px;
+      }
+    
+      .board {
+        gap: 1px;
+        padding: 5px;
+      }
+    }
+    
+    @media screen and (max-width: 400px) {
+      .cell {
+        width: 25px;
+        height: 25px;
+        font-size: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="minesweeperContainer" class="minesweeperContainer">
+    <div id="board" class="board"></div>
+    <div id="popup" class="popup" style="display: none;">
+      <div class="popupContent">
+        <h2 id="popupMessage"></h2>
+        <button id="playAgainButton">Play Again</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Game configuration
+    const BOARD_SIZE = 8;
+    const MINES_COUNT = 10;
+
+    // Game state variables
+    let board = [];
+    let gameOver = false;
+    let gameWon = false;
+
+    // DOM elements
+    const boardElement = document.getElementById("board");
+    const popupElement = document.getElementById("popup");
+    const popupMessageElement = document.getElementById("popupMessage");
+    const playAgainButton = document.getElementById("playAgainButton");
+
+    // Each cell is an object { value, revealed, flagged }
+    function initializeBoard() {
+      // Create board array
+      board = Array.from({ length: BOARD_SIZE }, () =>
+        Array.from({ length: BOARD_SIZE }, () => ({
+          value: 0,
+          revealed: false,
+          flagged: false
+        }))
+      );
+
+      // Place mines and update counts
+      let minesPlaced = 0;
+      while (minesPlaced < MINES_COUNT) {
+        const x = Math.floor(Math.random() * BOARD_SIZE);
+        const y = Math.floor(Math.random() * BOARD_SIZE);
+        if (board[x][y].value !== -1) {
+          board[x][y].value = -1; // -1 indicates a mine
+          minesPlaced++;
+          // Update adjacent cells
+          for (let i = -1; i <= 1; i++) {
+            for (let j = -1; j <= 1; j++) {
+              const newX = x + i;
+              const newY = y + j;
+              if (
+                newX >= 0 &&
+                newX < BOARD_SIZE &&
+                newY >= 0 &&
+                newY < BOARD_SIZE &&
+                board[newX][newY].value !== -1
+              ) {
+                board[newX][newY].value += 1;
+              }
+            }
+          }
+        }
+      }
+
+      gameOver = false;
+      gameWon = false;
+      renderBoard();
+      hidePopup();
+    }
+
+    // Render the board based on current state
+    function renderBoard() {
+      // Clear board container
+      boardElement.innerHTML = '';
+      // Loop through rows and cells
+      board.forEach((row, i) => {
+        const rowDiv = document.createElement("div");
+        rowDiv.className = "row";
+        row.forEach((cell, j) => {
+          const cellButton = document.createElement("button");
+          cellButton.className = "cell" + (cell.revealed ? " revealed" : "");
+          if (gameOver && cell.value === -1) {
+            // Highlight all mines on game over
+            cellButton.classList.add("mine");
+          }
+          cellButton.dataset.x = i;
+          cellButton.dataset.y = j;
+          cellButton.innerHTML = getCellContent(cell);
+
+          // Left click event
+          cellButton.addEventListener("click", function (e) {
+            handleClick(i, j, e);
+          });
+
+          // Right click event for flagging
+          cellButton.addEventListener("contextmenu", function (e) {
+            e.preventDefault();
+            handleClick(i, j, e);
+          });
+
+          rowDiv.appendChild(cellButton);
+        });
+        boardElement.appendChild(rowDiv);
+      });
+    }
+
+    // Returns the content for a cell based on its state
+    function getCellContent(cell) {
+      if (cell.flagged) return "🚩";
+      if (!cell.revealed) return "";
+      if (cell.value === -1) return "💣";
+      return cell.value || "";
+    }
+
+    // Reveal cell at position (x, y)
+    function revealCell(x, y) {
+      // Bounds check and early return if cell is already revealed or flagged
+      if (x < 0 || x >= BOARD_SIZE || y < 0 || y >= BOARD_SIZE) return;
+      const cell = board[x][y];
+      if (cell.revealed || cell.flagged) return;
+
+      cell.revealed = true;
+
+      // If the cell is empty (value 0), recursively reveal neighbors
+      if (cell.value === 0) {
+        for (let i = -1; i <= 1; i++) {
+          for (let j = -1; j <= 1; j++) {
+            revealCell(x + i, y + j);
+          }
+        }
+      }
+    }
+
+    // Handle clicks (left and right) on cells
+    function handleClick(x, y, e) {
+      if (gameOver || gameWon) return;
+      // Right-click (contextmenu) toggles flag
+      if (e.type === "contextmenu") {
+        board[x][y].flagged = !board[x][y].flagged;
+        renderBoard();
+        return;
+      }
+      
+      // If cell is flagged, ignore left click
+      if (board[x][y].flagged) return;
+
+      // Left click: if mine, game over; else reveal cell
+      if (board[x][y].value === -1) {
+        // Reveal all cells
+        board.forEach(row => row.forEach(cell => cell.revealed = true));
+        gameOver = true;
+        renderBoard();
+        showPopup("Game Over!");
+      } else {
+        revealCell(x, y);
+        renderBoard();
+        checkWin();
+      }
+    }
+
+    // Check if all non-mine cells have been revealed
+    function checkWin() {
+      const unrevealedSafeCells = board.flat().filter(
+        cell => !cell.revealed && cell.value !== -1
+      ).length;
+      if (unrevealedSafeCells === 0) {
+        gameWon = true;
+        showPopup("Congratulations!");
+      }
+    }
+
+    // Display popup message
+    function showPopup(message) {
+      popupMessageElement.textContent = message;
+      popupElement.style.display = "flex";
+    }
+
+    // Hide popup message
+    function hidePopup() {
+      popupElement.style.display = "none";
+    }
+
+    // Set up play again button
+    playAgainButton.addEventListener("click", initializeBoard);
+
+    // Initialize the game on page load
+    initializeBoard();
+  </script>
+</body>
+</html>

@@ -46,6 +46,7 @@ func main() {
     http.HandleFunc("/single", middleware(serveSingle))
     http.HandleFunc("/double", middleware(serveDouble))
     http.HandleFunc("/scores", middleware(serveScores))
+    http.HandleFunc("/hidden", middleware(serveHidden))
     http.HandleFunc("/submit-score", middleware(submitScore))
     port := ":6776"
     log.Printf("Starting server on %s...", port)
@@ -91,6 +92,10 @@ func serveSingle(w http.ResponseWriter, r *http.Request) {
 
 func serveDouble(w http.ResponseWriter, r *http.Request) {
 	http.ServeFile(w, r, "double.html")
+}
+
+func serveHidden(w http.ResponseWriter, r *http.Request) {
+    http.ServeFile(w, r, "hidden.html")
 }
 
 func serveScores(w http.ResponseWriter, r *http.Request) {
