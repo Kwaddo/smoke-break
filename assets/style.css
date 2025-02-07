@@ -77,7 +77,7 @@ h1 {
 }
 
 .arrow:hover {
-    background: #00000034;
+    cursor: pointer;
 }
 
 .arrow.up::before { content: "↑"; }
@@ -100,6 +100,12 @@ h1 {
     font-family: Arial, sans-serif;
     text-align: center;
     z-index: 100000;
+}
+
+#score-display {
+    margin-bottom: 43rem;
+    margin-right: 39.5rem;
+    z-index: 9999;
 }
 
 #game-menu button {

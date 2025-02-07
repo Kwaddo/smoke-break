@@ -5,6 +5,7 @@ let gameStarted = false;
 let pauseMenu, nameMenu = false, namePrompt;
 window.countdownTime = 180;
 let countdownInterval;
+let arrowStyleSet = false;
 let countdownDisplay;
 let score = 0;
 let pressedKeys = new Set();
@@ -87,14 +88,10 @@ function updateCountdown() {
     }
 }
 
-
 function createScoreDisplay() {
     const scoreDisplay = document.createElement("div");
     scoreDisplay.id = "score-display";
     scoreDisplay.style.position = "absolute";
-    scoreDisplay.style.bottom = "20px";
-    scoreDisplay.style.left = "50%";
-    scoreDisplay.style.transform = "translateX(-50%)";
     scoreDisplay.style.fontSize = "24px";
     scoreDisplay.style.color = "white";
     scoreDisplay.style.backgroundColor = "rgba(0, 0, 0, 0.7)";
@@ -110,7 +107,7 @@ function updateScoreDisplay() {
         const timeScore = window.countdownTime;
         const hintScore = window.hintScore;
         const totalScore = timeScore + hintScore;
-        scoreDisplay.innerText = `Score: ${totalScore} (Time: ${timeScore} + Hints: ${hintScore})`;
+        scoreDisplay.innerText = `Score: ${totalScore}`;
         scoreDisplay.style.opacity = 1;
     }
 }
@@ -459,6 +456,21 @@ window.addEventListener("resize", () => {
 function startAutoMove(direction) {
     if (moveInterval) clearInterval(moveInterval);
     
+    document.querySelectorAll('.arrow').forEach(arrow => {
+        arrow.style.backgroundColor = "";
+        arrow.style.transform = "";
+    });
+    const arrowSelector = `.arrow.${direction.slice(5).toLowerCase()}`;
+    const arrowElement = document.querySelector(arrowSelector);
+    
+    if (arrowElement) {
+        arrowElement.style.background = "rgba(0, 0, 0, 0.4)";
+        arrowElement.style.transform = "scale(0.95)";
+    }
+    
+    currentDirection = direction;
+    arrowStyleSet = true;
+    
     const moveEvent = { key: direction };
     movePlayer(moveEvent);
     
@@ -466,7 +478,7 @@ function startAutoMove(direction) {
         if (!isPaused) {
             movePlayer(moveEvent);
         }
-    }, 250);
+    }, 200);
 }
 
 function stopAutoMove() {
@@ -474,7 +486,28 @@ function stopAutoMove() {
         clearInterval(moveInterval);
         moveInterval = null;
     }
+    document.querySelectorAll('.arrow').forEach(arrow => {
+        arrow.style.background = "";
+        arrow.style.transform = "";
+    });
     currentDirection = null;
+    arrowStyleSet = false;
+}
+
+function simulateArrowClick(key) {
+    const arrowSelector = `.arrow.${key.slice(5).toLowerCase()}`;
+    const arrowElement = document.querySelector(arrowSelector);
+
+    if (arrowElement) {
+        arrowElement.style.background = "rgba(0, 0, 0, 0.7)";
+        arrowElement.style.transform = "scale(0.95)";
+        setTimeout(() => {
+            arrowElement.style.background = "";
+            arrowElement.style.transform = "";
+        }, 100); 
+    }
+    const event = { key: key };
+    movePlayer(event);
 }
 
 window.addEventListener("keydown", (e) => {
