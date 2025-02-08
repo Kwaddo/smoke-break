@@ -9,7 +9,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Honk&family=Sixtyfour&family=Jersey+10&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Honk&family=Sixtyfour&family=Jersey+10&display=swap"
+        rel="stylesheet">
 </head>
 
 <body>
@@ -30,14 +31,16 @@
                     <div class="arrow down" title="Arrow Down" onclick="simulateArrowClick('ArrowDown')"></div>
                     <div class="arrow right" title="Arrow Right" onclick="simulateArrowClick('ArrowRight')"></div>
                 </div>
-            </div>            
+            </div>
         </div>
     </div>
-    
+
     <div id="game-menu">
         <br><br><br>
         <div class="menu">
-            <p class="start-text">Man, I need Ahmed for an audit! I can't find him on campus, so I need to go outside and find him in his Smoke Break. There are all these other people around him though, which one is he?!</p>
+            <p class="start-text">Man, I need Ahmed for an audit! I can't find him on campus, so I need to go outside
+                and find him in his Smoke Break. There are all these other people around him though, which one is he?!
+            </p>
             <div class="menuSpacing">
                 <button id="start-game">Start Game</button>
                 <button id="return-game" onclick="window.location.href='http:\/\/localhost:6776/'">Main Menu</button>
@@ -47,9 +50,12 @@
     <div class="mode-selection">
         <h1>Select Game Map</h1>
         <div class="mode-option">
-            <button class="mode-button single" onclick="switchMap(3)" title="Morning"><i class="fa-solid fa-sun"></i></button>
-            <button class="mode-button single" onclick="switchMap(1)" title="Afternoon"><i class="fa-solid fa-cloud-sun"></i></button>
-            <button class="mode-button single" onclick="switchMap(2)" title="Evening"><i class="fa-solid fa-moon"></i></button>
+            <button class="mode-button single" onclick="switchMap(3)" title="Morning"><i
+                    class="fa-solid fa-sun"></i></button>
+            <button class="mode-button single" onclick="switchMap(1)" title="Afternoon"><i
+                    class="fa-solid fa-cloud-sun"></i></button>
+            <button class="mode-button single" onclick="switchMap(2)" title="Evening"><i
+                    class="fa-solid fa-moon"></i></button>
         </div>
     </div>
     <div id="leaderboard-container">
@@ -62,6 +68,7 @@
             <button id="next-page">Next</button>
         </div>
     </div>
+    <div id="score-display" class="score-display">Score: 0</div>
     <div id="tilemap-container"></div>
     <div class="map"></div>
     <script src="./assets/tilemap.js"></script>

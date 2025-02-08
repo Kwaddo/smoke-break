@@ -42,7 +42,6 @@ function resetGame(instant = false) {
         }
     });
     window.characters = [];
-    window.clearHints();
     window.hintScore = 0;
     removePlayer();
     window.winningCharacter = null;
@@ -51,11 +50,8 @@ function resetGame(instant = false) {
         countdownDisplay.remove();
         countdownDisplay = null;
     }
-    const scoreDisplay = document.getElementById("score-display");
-    if (scoreDisplay) {
-        scoreDisplay.remove();
-    }
     clearInterval(countdownInterval);
+    window.clearHints();
     
     if (instant) {
         initGame();
@@ -88,19 +84,6 @@ function updateCountdown() {
     }
 }
 
-function createScoreDisplay() {
-    const scoreDisplay = document.createElement("div");
-    scoreDisplay.id = "score-display";
-    scoreDisplay.style.position = "absolute";
-    scoreDisplay.style.fontSize = "24px";
-    scoreDisplay.style.color = "white";
-    scoreDisplay.style.backgroundColor = "rgba(0, 0, 0, 0.7)";
-    scoreDisplay.style.padding = "10px";
-    scoreDisplay.style.borderRadius = "5px";
-    document.body.appendChild(scoreDisplay);
-    updateScoreDisplay();
-}
-
 function updateScoreDisplay() {
     const scoreDisplay = document.getElementById("score-display");
     if (scoreDisplay && !isPaused) {
@@ -108,7 +91,6 @@ function updateScoreDisplay() {
         const hintScore = window.hintScore;
         const totalScore = timeScore + hintScore;
         scoreDisplay.innerText = `Score: ${totalScore}`;
-        scoreDisplay.style.opacity = 1;
     }
 }
 
@@ -198,8 +180,8 @@ function promptForName(finalScore) {
     });
 
     returnMenu.addEventListener("click", () => {
+        resetGame();
         hideNameMenu(true);
-        resetGame();    
     });
 
     submitButton.addEventListener("click", () => {
@@ -541,7 +523,6 @@ function initGame() {
     initPlayer();
     window.initCharacter();
     createCountdownTimer();
-    createScoreDisplay();
     startCountdown();
     window.startHintSystem();
     lastMoveTime = performance.now();

@@ -532,3 +532,15 @@ h1 {
 #return-menu:hover {
     background-color: #da190b;
 }
+
+.score-display {
+    position: absolute;
+    font-size: 24px;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 43rem;
+    margin-right: 39.5rem;
+    z-index: 9999;
+}

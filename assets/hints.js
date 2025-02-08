@@ -133,10 +133,13 @@ function startHintSystem() {
 }
 
 function clearHints() {
-    activeHints.forEach(hint => hint.remove());
+    const hints = document.querySelectorAll('.hint');
+    hints.forEach(hint => hint.remove());
     activeHints = [];
     hintScore = 0;
     window.hintScore = 0;
+    const popups = document.querySelectorAll('.popup');
+    popups.forEach(popup => popup.remove());
     window.updateScoreDisplay();
 }
 
