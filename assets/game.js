@@ -310,24 +310,24 @@ function initPlayer() {
     const player = document.createElement("div")
     player.id = "player"
 
-    let startX, startY
+    let startX, startY;
     do {
-        startX = Math.floor(window.columns / 1.4)
-        startY = Math.floor(window.rows / 2.1)
+        startX = Math.floor(window.columns / 1.4);
+        startY = Math.floor(window.rows / 2.1);
     } while (!window.isValidMove(startX, startY))
 
-    updatePlayerPosition(player, startX, startY)
+    updatePlayerPosition(player, startX, startY);
 
-    window.tilemapContainer.appendChild(player)
-    player.dataset.x = startX
-    player.dataset.y = startY
+    window.tilemapContainer.appendChild(player);
+    player.dataset.x = startX;
+    player.dataset.y = startY;
 }
 
 function updatePlayerPosition(player, x, y) {
-    const left = x * window.tileSize + window.tileSize / 2 - player.offsetWidth / 2
-    const top = y * window.tileSize + window.tileSize / 2 - player.offsetHeight / 2
-    player.style.left = `${left}px`
-    player.style.top = `${top}px`
+    const left = x * window.tileSize + window.tileSize / 2 - player.offsetWidth / 2;
+    const top = y * window.tileSize + window.tileSize / 2 - player.offsetHeight / 2;
+    player.style.left = `${left}px`;
+    player.style.top = `${top}px`;
 }
 
 function movePlayer(e) {

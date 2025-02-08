@@ -207,16 +207,6 @@ h1 {
     }
 }
 
-#player {
-    background-color: black;
-    border-radius: 50%;
-    border: 3px solid white;
-    width: 20px;
-    height: 20px;
-    position: absolute;
-    z-index: 999;
-}
-
 #tilemap-container {
     display: grid;
     position: relative;
