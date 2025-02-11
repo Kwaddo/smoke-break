@@ -549,6 +549,7 @@ function initGame() {
     window.initCharacter();
     createCountdownTimer();
     startCountdown();
+    window.clearHints();
     window.startHintSystem();
     lastMoveTime = performance.now();
     requestAnimationFrame(gameLoop);
